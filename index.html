@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Калькулятор размера исследования</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&display=swap');
+
+  :root{
+    --paper:#EEF1F6;
+    --ink:#16172A;
+    --muted:#5B607A;
+    --line:#E2E6EF;
+    --card:#FFFFFF;
+    --accent:#5B6BD6;
+    --warn-bg:#FFF4E6;
+    --warn-ink:#9A5B00;
+    --warn-line:#FFD8A1;
+    --h0:#2BB3A3; --h1:#3E9AC9; --h2:#5B6BD6; --h3:#7B5BD6; --h4:#B047C4; --h5:#D6409F;
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+    font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:880px;margin:0 auto;padding:28px 20px 64px}
+
+  .lede{margin:0 0 22px}
+  .lede h1{font-family:var(--display);font-weight:600;font-size:26px;letter-spacing:-.02em;margin:0 0 6px}
+  .lede p{margin:0;color:var(--muted);max-width:62ch}
+
+  /* ===== result panel ===== */
+  .result{background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:22px;margin-bottom:14px;position:sticky;top:12px;z-index:5;
+    box-shadow:0 8px 30px -18px rgba(22,23,42,.5)}
+  .res-top{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+  .badge{flex:0 0 auto;width:118px;height:118px;border-radius:18px;display:flex;
+    flex-direction:column;align-items:center;justify-content:center;color:#fff;
+    transition:background .35s ease}
+  .badge .sz{font-family:var(--display);font-weight:700;font-size:40px;line-height:1;letter-spacing:-.02em}
+  .badge .cnt{font-size:12px;opacity:.9;margin-top:6px}
+  .res-body{flex:1 1 230px;min-width:230px}
+  .res-name{font-family:var(--display);font-weight:600;font-size:19px;margin:2px 0 12px}
+  .res-empty{color:var(--muted);padding-top:8px}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px}
+  .fact .k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:2px}
+  .fact .v{font-weight:500}
+  .why{margin-top:14px;padding-top:13px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+  .why b{color:var(--ink);font-weight:550}
+  .warn{margin-top:12px;background:var(--warn-bg);border:1px solid var(--warn-line);
+    color:var(--warn-ink);border-radius:12px;padding:10px 13px;font-size:13.5px}
+  .err{margin-top:12px;background:#FDECEC;border:1px solid #F0AEAE;
+    color:#A11B1B;border-radius:12px;padding:11px 14px;font-size:13.5px;font-weight:500}
+
+  /* ===== heat track ===== */
+  .track{display:flex;gap:6px;margin-top:16px}
+  .seg{flex:1;text-align:center}
+  .seg .bar{height:7px;border-radius:4px;background:var(--line);transition:background .3s,transform .3s}
+  .seg .lab{font-size:11px;color:var(--muted);margin-top:5px;font-weight:500;transition:color .3s}
+  .seg.on .lab{color:var(--ink);font-weight:600}
+  .seg.cur .bar{transform:scaleY(1.7)}
+
+  /* ===== checklist ===== */
+  .group{margin-top:18px}
+  .group-h{display:flex;align-items:center;gap:8px;margin:0 2px 9px;font-weight:600;font-size:15px}
+  .group-h .gc{margin-left:auto;font-size:12px;color:var(--muted);font-weight:500;
+    background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 9px}
+  .group-h .gc.has{color:#fff;background:var(--accent);border-color:var(--accent)}
+  .rows{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .row{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;
+    border-top:1px solid var(--line);transition:background .12s}
+  .row:first-child{border-top:none}
+  .row:hover{background:#F7F8FC}
+  .box{flex:0 0 auto;width:21px;height:21px;border-radius:7px;border:2px solid #C8CDDB;
+    display:flex;align-items:center;justify-content:center;transition:.15s}
+  .box svg{width:13px;height:13px;stroke:#fff;stroke-width:3;fill:none;opacity:0;transition:.15s}
+  .row.sel .box{background:var(--accent);border-color:var(--accent)}
+  .row.sel .box svg{opacity:1}
+  .row .txt{flex:1}
+  .row.sel .txt{font-weight:500}
+  .pill{flex:0 0 auto;font-family:var(--display);font-size:11px;font-weight:600;color:var(--muted);
+    background:var(--paper);border-radius:7px;padding:3px 8px;letter-spacing:.01em}
+
+  .footer{margin-top:28px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .reset{font-family:var(--body);font-size:14px;font-weight:500;color:var(--muted);
+    background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 16px;cursor:pointer}
+  .reset:hover{color:var(--ink);border-color:#C8CDDB}
+  .note{font-size:12.5px;color:var(--muted);max-width:60ch}
+  .note b{color:var(--ink);font-weight:550}
+
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  @media (max-width:560px){
+    .badge{width:96px;height:96px}.badge .sz{font-size:32px}
+    .facts{grid-template-columns:1fr}
+    .result{position:static}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <div class="lede">
+    <h1>Какой размер у этого исследования?</h1>
+    <p>Отметьте всё, что верно про задачу. Размер, срок для заказчика и блок времени посчитаются сами — снизу видно, какой критерий что потянул.</p>
+  </div>
+
+  <div class="result" id="result"></div>
+
+  <div id="checklist"></div>
+
+  <div class="footer">
+    <button class="reset" id="reset">Сбросить</button>
+  </div>
+</div>
+
+<script>
+const SIZES=[
+  {key:'XS', name:'Влётный ответ',            time:'до 4 часов',        client:'сегодня–завтра',                      block:'полдня',           heat:'var(--h0)'},
+  {key:'S',  name:'Быстрое на готовых данных', time:'1–2 дня',           client:'2–3 дня',                             block:'1–2 дня',          heat:'var(--h1)'},
+  {key:'M',  name:'Стандартное исследование',  time:'около недели',      client:'≈ 1 неделя',                          block:'4–5 дней',         heat:'var(--h2)'},
+  {key:'L',  name:'Большое исследование',      time:'2–3 недели',        client:'2–3 недели',                          block:'2–3 недели',       heat:'var(--h3)'},
+  {key:'XL', name:'Партнёрское / федеральное', time:'1–1,5 месяца',      client:'≈ месяц, зависит от согласований',    block:'4–6 недель',       heat:'var(--h4)'},
+  {key:'XXL',name:'Продукт / медиапроект',     time:'от 1,5 месяцев',    client:'от 1,5 мес — точный срок после скоупинга', block:'6+ недель, нужна команда', heat:'var(--h5)'},
+];
+
+const GROUPS=[
+  {title:'⏱ Скорость и срочность', items:[
+    ['Запрос от СМИ — влётный комментарий','XS',0,'fast'],
+    ['Нужен ответ за 1–2 дня','XS',0,'fast'],
+    ['Меньше 4 часов работы аналитика','XS',0,'fast'],
+  ]},
+  {title:'📦 Готовность данных', items:[
+    ['Данные есть в основных показателях','XS–S',1],
+    ['Уже работали с этими данными','XS–S',1],
+    ['Тема или условия — новые для команды','L–XXL',3],
+    ['Нужно разобраться в методологии партнёра','L–XL',3],
+  ]},
+  {title:'🔁 Повторяемость', items:[
+    ['Повторяется регулярно, есть шаблон','S–M',1],
+    ['Обновляем существующее исследование','M',2],
+    ['Ищем свежий инсайт в знакомых данных','M',2],
+  ]},
+  {title:'📤 Формат результата', items:[
+    ['Строится на опросе','S–M',2],
+    ['Опросная + количественная часть','M–L',3],
+    ['Есть датавиз','M–XL',3],
+    ['Отдельный датавиз + дата-сторителлинг в соцсети','XL–XXL',4],
+    ['Федеральные / региональные версии пресс-релиза','L–XXL',4],
+    ['Это тренд-репорт','L–XL',3],
+    ['Нужна разработка (лендинг, данные, видео)','XXL',5,'floor'],
+    ['Около-продукт или большой медиапроект','XXL',5,'floor'],
+  ]},
+  {title:'🤝 Участники и согласования', items:[
+    ['Партнёрское исследование (риск задержек)','L–XXL',4],
+    ['Несколько команд / внешних стейкхолдеров, нет ИП','XL–XXL',4],
+  ]},
+  {title:'🎯 Ценность и охват', items:[
+    ['Есть прямая польза для предпринимателя','M–XXL',2],
+    ['Нужны федеральные охваты и широкая аудитория','L–XXL',3],
+  ]},
+];
+
+// flatten
+const TRIGGERS=[];
+GROUPS.forEach((g,gi)=>g.items.forEach(it=>TRIGGERS.push(
+  {label:it[0],range:it[1],rep:it[2],kind:it[3]||'normal',group:gi})));
+
+const state=new Set();
+
+// Несовместимо с влётной задачей день-в-день:
+const HEAVY=new Set([
+  'Нужна разработка (лендинг, данные, видео)',
+  'Около-продукт или большой медиапроект',
+  'Федеральные / региональные версии пресс-релиза',
+]);
+// Знакомые данные — снимают конфликт срочности:
+const READY=new Set([
+  'Данные есть в основных показателях',
+  'Уже работали с этими данными',
+]);
+
+function compute(){
+  const chosen=[...state].map(i=>TRIGGERS[i]);
+  if(!chosen.length) return {empty:true};
+  const floor=chosen.some(t=>t.kind==='floor');
+  const maxRep=floor?5:Math.max(...chosen.map(t=>t.rep));
+  const idx=floor?5:maxRep;
+  const drivers=chosen.filter(t=> floor ? t.kind==='floor' : t.rep===maxRep);
+  const support=chosen.filter(t=>!drivers.includes(t));
+
+  const urgent=chosen.some(t=>t.kind==='fast');
+  const ready=chosen.some(t=>READY.has(t.label));
+  const heavyHit=chosen.filter(t=>HEAVY.has(t.label));
+  const error=urgent && heavyHit.length>0 && !ready;
+  // мягкое предупреждение — для прочих срочно+тяжело; знакомые данные его тоже снимают
+  const conflict=!error && urgent && idx>=3 && !ready;
+  return {idx,drivers,support,conflict,error,heavyHit,ready,count:chosen.length};
+}
+
+function el(html){const t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstChild;}
+
+function renderResult(){
+  const r=compute();
+  const box=document.getElementById('result');
+  const track=`<div class="track">${SIZES.map((s,i)=>{
+    const on=!r.empty && i<=r.idx, cur=!r.empty && i===r.idx;
+    return `<div class="seg ${on?'on':''} ${cur?'cur':''}"><div class="bar" style="${on?`background:${s.heat}`:''}"></div><div class="lab">${s.key}</div></div>`;
+  }).join('')}</div>`;
+
+  if(r.empty){
+    box.innerHTML=`<div class="res-top"><div class="badge" style="background:#C8CDDB"><div class="sz">?</div></div>
+      <div class="res-body"><div class="res-empty">Отметьте критерии ниже — размер появится здесь.</div></div></div>${track}`;
+    return;
+  }
+  const s=SIZES[r.idx];
+  const drv=r.drivers.map(d=>`«${d.label}»`).join(', ');
+  const sup=r.support.length?`<div style="margin-top:5px">Поддерживают: ${r.support.map(d=>d.label).join(', ')}.</div>`:'';
+  box.innerHTML=`
+    <div class="res-top">
+      <div class="badge" style="background:${s.heat}">
+        <div class="sz">${s.key}</div><div class="cnt">${r.count} ${plural(r.count)}</div>
+      </div>
+      <div class="res-body">
+        <div class="res-name">${s.name}</div>
+        <div class="facts">
+          <div class="fact"><div class="k">Время на драфт</div><div class="v">${s.time}</div></div>
+          <div class="fact"><div class="k">В календарь</div><div class="v">${s.block}</div></div>
+          <div class="fact" style="grid-column:1/-1"><div class="k">Ответ заказчику по сроку</div><div class="v">${s.client}</div></div>
+        </div>
+      </div>
+    </div>
+    ${track}
+    ${r.error?`<div class="err">⛔ Так не получится: влётную задачу день-в-день нельзя ставить параллельно с «${r.heavyHit.map(h=>h.label).join('», «')}». Уберите одно из двух — либо отметьте, что данные знакомы, тогда успеете.</div>`:''}
+    <div class="why">Размер задаёт <b>${drv}</b>.${sup}</div>
+    ${r.conflict?`<div class="warn">⚠ Срочный запрос, но по содержанию это ${s.key}. Так быстро не выйдет без потери качества — урежьте скоуп или подвиньте срок и проговорите это с заказчиком.</div>`:''}`;
+}
+
+function plural(n){const a=n%10,b=n%100;if(a===1&&b!==11)return'критерий';if(a>=2&&a<=4&&(b<10||b>=20))return'критерия';return'критериев'}
+
+function renderChecklist(){
+  const root=document.getElementById('checklist');
+  root.innerHTML='';
+  GROUPS.forEach((g,gi)=>{
+    const idxs=TRIGGERS.map((t,i)=>i).filter(i=>TRIGGERS[i].group===gi);
+    const sel=idxs.filter(i=>state.has(i)).length;
+    const grp=el(`<div class="group">
+      <div class="group-h"><span>${g.title}</span><span class="gc ${sel?'has':''}">${sel?sel+' / ':''}${idxs.length}</span></div>
+      <div class="rows"></div></div>`);
+    const rows=grp.querySelector('.rows');
+    idxs.forEach(i=>{
+      const t=TRIGGERS[i];
+      const row=el(`<div class="row ${state.has(i)?'sel':''}" data-i="${i}" role="checkbox" tabindex="0" aria-checked="${state.has(i)}">
+        <div class="box"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div>
+        <div class="txt">${t.label}</div><div class="pill">${t.range}</div></div>`);
+      const toggle=()=>{state.has(i)?state.delete(i):state.add(i);renderChecklist();renderResult();};
+      row.addEventListener('click',toggle);
+      row.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();toggle();}});
+      rows.appendChild(row);
+    });
+    root.appendChild(grp);
+  });
+}
+
+document.getElementById('reset').addEventListener('click',()=>{state.clear();renderChecklist();renderResult();});
+renderChecklist();renderResult();
+</script>
+
+</html>
