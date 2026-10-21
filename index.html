@@ -1,267 +1,153 @@
 <!doctype html>
 <html lang="ru">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Калькулятор размера исследования</title>
+<meta name="description" content="Рассчитайте срок бизнес-исследования: от заявки до публикации, с этапами, опросом и согласованиями.">
+<title>Когда выйдет исследование? — Калькулятор сроков</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&display=swap');
-
-  :root{
-    --paper:#EEF1F6;
-    --ink:#16172A;
-    --muted:#5B607A;
-    --line:#E2E6EF;
-    --card:#FFFFFF;
-    --accent:#5B6BD6;
-    --warn-bg:#FFF4E6;
-    --warn-ink:#9A5B00;
-    --warn-line:#FFD8A1;
-    --h0:#2BB3A3; --h1:#3E9AC9; --h2:#5B6BD6; --h3:#7B5BD6; --h4:#B047C4; --h5:#D6409F;
-    --display:'Space Grotesk',system-ui,sans-serif;
-    --body:'Inter',system-ui,sans-serif;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
-    font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:880px;margin:0 auto;padding:28px 20px 64px}
-
-  .lede{margin:0 0 22px}
-  .lede h1{font-family:var(--display);font-weight:600;font-size:26px;letter-spacing:-.02em;margin:0 0 6px}
-  .lede p{margin:0;color:var(--muted);max-width:62ch}
-
-  /* ===== result panel ===== */
-  .result{background:var(--card);border:1px solid var(--line);border-radius:18px;
-    padding:22px;margin-bottom:14px;position:sticky;top:12px;z-index:5;
-    box-shadow:0 8px 30px -18px rgba(22,23,42,.5)}
-  .res-top{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
-  .badge{flex:0 0 auto;width:118px;height:118px;border-radius:18px;display:flex;
-    flex-direction:column;align-items:center;justify-content:center;color:#fff;
-    transition:background .35s ease}
-  .badge .sz{font-family:var(--display);font-weight:700;font-size:40px;line-height:1;letter-spacing:-.02em}
-  .badge .cnt{font-size:12px;opacity:.9;margin-top:6px}
-  .res-body{flex:1 1 230px;min-width:230px}
-  .res-name{font-family:var(--display);font-weight:600;font-size:19px;margin:2px 0 12px}
-  .res-empty{color:var(--muted);padding-top:8px}
-  .facts{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px}
-  .fact .k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:2px}
-  .fact .v{font-weight:500}
-  .why{margin-top:14px;padding-top:13px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
-  .why b{color:var(--ink);font-weight:550}
-  .warn{margin-top:12px;background:var(--warn-bg);border:1px solid var(--warn-line);
-    color:var(--warn-ink);border-radius:12px;padding:10px 13px;font-size:13.5px}
-  .err{margin-top:12px;background:#FDECEC;border:1px solid #F0AEAE;
-    color:#A11B1B;border-radius:12px;padding:11px 14px;font-size:13.5px;font-weight:500}
-
-  /* ===== heat track ===== */
-  .track{display:flex;gap:6px;margin-top:16px}
-  .seg{flex:1;text-align:center}
-  .seg .bar{height:7px;border-radius:4px;background:var(--line);transition:background .3s,transform .3s}
-  .seg .lab{font-size:11px;color:var(--muted);margin-top:5px;font-weight:500;transition:color .3s}
-  .seg.on .lab{color:var(--ink);font-weight:600}
-  .seg.cur .bar{transform:scaleY(1.7)}
-
-  /* ===== checklist ===== */
-  .group{margin-top:18px}
-  .group-h{display:flex;align-items:center;gap:8px;margin:0 2px 9px;font-weight:600;font-size:15px}
-  .group-h .gc{margin-left:auto;font-size:12px;color:var(--muted);font-weight:500;
-    background:var(--card);border:1px solid var(--line);border-radius:20px;padding:2px 9px}
-  .group-h .gc.has{color:#fff;background:var(--accent);border-color:var(--accent)}
-  .rows{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .row{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;
-    border-top:1px solid var(--line);transition:background .12s}
-  .row:first-child{border-top:none}
-  .row:hover{background:#F7F8FC}
-  .box{flex:0 0 auto;width:21px;height:21px;border-radius:7px;border:2px solid #C8CDDB;
-    display:flex;align-items:center;justify-content:center;transition:.15s}
-  .box svg{width:13px;height:13px;stroke:#fff;stroke-width:3;fill:none;opacity:0;transition:.15s}
-  .row.sel .box{background:var(--accent);border-color:var(--accent)}
-  .row.sel .box svg{opacity:1}
-  .row .txt{flex:1}
-  .row.sel .txt{font-weight:500}
-  .pill{flex:0 0 auto;font-family:var(--display);font-size:11px;font-weight:600;color:var(--muted);
-    background:var(--paper);border-radius:7px;padding:3px 8px;letter-spacing:.01em}
-
-  .footer{margin-top:28px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-  .reset{font-family:var(--body);font-size:14px;font-weight:500;color:var(--muted);
-    background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 16px;cursor:pointer}
-  .reset:hover{color:var(--ink);border-color:#C8CDDB}
-  .note{font-size:12.5px;color:var(--muted);max-width:60ch}
-  .note b{color:var(--ink);font-weight:550}
-
-  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  @media (max-width:560px){
-    .badge{width:96px;height:96px}.badge .sz{font-size:32px}
-    .facts{grid-template-columns:1fr}
-    .result{position:static}
-  }
-  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+:root{--paper:#eef1f6;--ink:#16172a;--muted:#596078;--line:#dce1ed;--card:#fff;--accent:#4d5dc5;--soft:#eef0ff;--warn:#83520d;--warn-bg:#fff5df;--success:#226850;--body:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 var(--body);-webkit-font-smoothing:antialiased}button,input,select,textarea{font:inherit}button,a,input,select,textarea{touch-action:manipulation}button{cursor:pointer}a{color:var(--accent);text-underline-offset:3px}::selection{background:#d9ddff}input,textarea{caret-color:var(--accent)}:focus-visible{outline:3px solid var(--accent);outline-offset:3px}[hidden]{display:none!important}.wrap{max-width:1240px;margin:auto;padding:32px 32px 56px}.top{display:flex;justify-content:space-between;align-items:center;padding-bottom:22px;border-bottom:1px solid var(--line);gap:20px}.brand{font-weight:650;letter-spacing:-.015em}.meta{color:var(--muted);font-size:12px}.intro{margin:32px 0 26px}.intro h1{font-size:34px;line-height:1.15;letter-spacing:-.025em;font-weight:650;margin:0 0 12px}.intro p{max-width:720px;margin:0;color:var(--muted);font-size:16px}.layout{display:grid;grid-template-columns:minmax(0,1fr) 365px;gap:28px;align-items:start}.form-panel{background:var(--card);border-radius:14px;padding:24px 28px}.mode{display:flex;background:var(--paper);padding:4px;border-radius:10px;margin-bottom:25px;gap:3px}.mode label{flex:1;position:relative}.mode input{position:absolute;opacity:0;width:1px;height:1px}.mode span{display:block;padding:9px;text-align:center;border-radius:7px;font-size:14px;font-weight:550;color:var(--muted)}.mode input:checked+span{background:white;color:var(--ink);box-shadow:0 2px 4px #16172a0d}.mode input:focus-visible+span{outline:3px solid var(--accent)}fieldset{border:0;margin:0;padding:0;min-width:0}fieldset+fieldset,.field-block{margin-top:26px;padding-top:24px;border-top:1px solid var(--line)}legend{font-size:17px;font-weight:650;padding:0;margin-bottom:5px;letter-spacing:-.01em}.hint{color:var(--muted);font-size:13px;margin:0 0 13px}.choices{display:grid;gap:8px}.choice{display:flex;align-items:flex-start;gap:11px;padding:13px 14px;border:1px solid var(--line);border-radius:9px;cursor:pointer;transition:background 150ms,border-color 150ms}.choice:hover{border-color:#abb4dc}.choice:has(input:checked){background:var(--soft);border-color:#8792d7}.choice:has(input:disabled){opacity:.55;cursor:not-allowed}.choice input{margin:5px 0 0;accent-color:var(--accent);width:16px;height:16px;flex:none}.choice .text{min-width:0;flex:1}.choice strong{font-weight:600;font-size:14px}.choice small{display:block;color:var(--muted);font-size:12.5px;line-height:1.45;margin-top:3px}.tag{font-size:12px;font-weight:650;min-width:26px;text-align:center;padding:2px 6px;border-radius:5px;background:#fff;color:var(--accent);align-self:center}.compact{grid-template-columns:1fr 1fr}.compact .choice{padding:11px}.subfields{margin-top:15px;padding:0 3px}.control{display:block;font-size:13px;font-weight:550;margin:12px 0 6px}.input{width:100%;min-width:0;border:1px solid #bac2d4;border-radius:7px;padding:9px 10px;background:white;color:var(--ink);min-height:42px}.input:focus{border-color:var(--accent)}.input:disabled{background:var(--paper);color:var(--muted)}.input[aria-invalid=true]{border-color:#a34527}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.inlinecheck{display:flex;align-items:flex-start;gap:8px;font-size:13px;cursor:pointer;margin-top:12px}.inlinecheck input{accent-color:var(--accent);margin-top:4px}.note{font-size:12.5px;color:var(--muted);margin:10px 0 0}.notice{padding:12px 14px;border-radius:8px;font-size:13px;background:var(--soft);color:#343d80;margin-top:14px}.notice.warn{background:var(--warn-bg);color:var(--warn)}.notice:empty{display:none}.sidebar{position:sticky;top:20px}.result{background:#fff;border-radius:14px;padding:25px}.result-head{display:flex;gap:10px;align-items:center;font-size:14px;font-weight:600}.size{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:white;font-size:15px;width:35px;height:35px;border-radius:8px;flex:none}.weeks{font-size:14px;font-weight:600;color:var(--muted);margin:-7px 0 18px}.duration{font-size:27px;font-weight:650;letter-spacing:-.025em;margin:21px 0 2px;line-height:1.2}.result-sub{font-size:13px;color:var(--muted);margin:8px 0 21px}.summary{margin:0}.summary div{display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);padding:12px 0;font-size:13px}.summary dt{color:var(--muted)}.summary dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-weight:600}.summary .release{font-size:15px}.summary .release dt{color:var(--ink)}.summary .release dd{color:var(--accent)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}.btn{border:1px solid var(--line);border-radius:8px;padding:10px 13px;color:var(--ink);background:white;font-size:13px;font-weight:600}.btn:hover{background:var(--paper)}.btn.primary{background:var(--accent);border-color:var(--accent);color:white;flex:1}.btn.primary:hover{background:#3f4eb0}.btn:disabled{opacity:.5;cursor:not-allowed}.text-btn{padding:0;background:none;border:0;color:var(--muted);font-size:13px;text-decoration:underline;text-underline-offset:3px}.side-foot{padding:16px 6px;font-size:12px;color:var(--muted)}.side-foot p{margin:0 0 10px}.timeline{margin-top:28px;background:white;border-radius:14px;padding:27px 28px}.section-title{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:7px}.section-title h2{font-size:21px;letter-spacing:-.015em;margin:0;font-weight:650}.section-title span{font-size:13px;color:var(--muted)}.ribbon{display:flex;height:10px;gap:3px;margin:23px 0;border-radius:4px;overflow:hidden}.ribbon span{min-width:3px;background:var(--accent)}.ribbon span:nth-child(2n){background:#8b96db}.ribbon span:nth-child(3n){background:#b4bde8}.table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}th{text-align:left;font-size:12px;font-weight:500;color:var(--muted);padding:0 14px 11px 0}td{padding:13px 14px 13px 0;border-top:1px solid var(--line);vertical-align:top}td:first-child{width:57%}td:nth-child(2){font-variant-numeric:tabular-nums;white-space:nowrap}td:last-child,th:last-child{padding-right:0;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}td small{display:block;font-size:12px;color:var(--muted);line-height:1.45;max-width:65ch;margin-top:4px}.parallel{display:inline-block;color:var(--accent);font-size:12px;background:var(--soft);padding:1px 6px;border-radius:4px;margin-left:6px}.total-row td{font-weight:650;padding-top:17px}.method{margin-top:24px;padding:0 4px}details summary{cursor:pointer;font-size:14px;font-weight:600;padding:8px 0}details p,details li{font-size:13px;color:var(--muted)}details p{max-width:85ch}details li{margin:8px 0}details ul{padding-left:20px}footer{display:flex;justify-content:space-between;gap:20px;margin-top:30px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}#copy-fallback{margin-top:15px;font-size:12px}#copy-text{height:160px;margin-top:7px}.date-error{color:#9a391c}.quick-copy{font-size:14px;color:var(--muted);margin:0 0 20px}.mobile-link{display:none}.status{font-size:12px;color:var(--success);min-height:18px;margin-top:9px}.assumptions{margin-top:15px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+@media(max-width:1000px){.wrap{padding:24px}.layout{grid-template-columns:minmax(0,1fr) 320px;gap:20px}.form-panel{padding:23px}.compact{grid-template-columns:1fr}}
+@media(max-width:760px){.wrap{padding:20px 16px 36px}.top{padding-bottom:16px}.meta{max-width:110px;text-align:right}.intro{margin:26px 0 22px}.intro h1{font-size:28px;max-width:330px}.intro p{font-size:14px}.layout{display:flex;flex-direction:column;gap:20px}.form-panel{width:100%;padding:21px 18px}.sidebar{position:static;width:100%}.compact{grid-template-columns:1fr 1fr}.timeline{padding:22px 18px;margin-top:20px}.section-title{align-items:flex-start}.section-title h2{font-size:19px}.section-title span{font-size:12px;text-align:right}.result{padding:22px}.mobile-link{display:inline-block;margin-top:12px;font-size:13px}.two{gap:10px}.mode span{font-size:12px;padding:9px 5px}.table-scroll{overflow:visible}table{font-size:12px;table-layout:fixed}td:first-child{width:55%}th:first-child{width:55%}td:nth-child(2),th:nth-child(2){width:16%}td:last-child,th:last-child{width:29%;white-space:normal}td{padding:12px 7px 12px 0}td small{font-size:12px}.parallel{margin-left:0;margin-top:4px}.choice{padding:12px}.duration{font-size:25px}footer{display:block}footer span{display:block;margin-bottom:6px}}
+@media(max-width:380px){.compact,.two{grid-template-columns:1fr}.top{align-items:flex-start}.brand{max-width:140px}}
+@media print{body{background:white}.wrap{padding:0;max-width:none}.top,.intro,.form-panel,.side-foot,.actions,.mobile-link,.method,footer,.status{display:none!important}.layout{display:block}.sidebar{position:static}.result{padding:0}.timeline{padding:0;margin-top:22px}.result-sub,.notice{margin:8px 0}.summary div{padding:5px 0}.duration{margin:12px 0}.ribbon{display:none}tr{break-inside:avoid}table{font-size:11px}td{padding:7px}#copy-fallback{display:none!important}h2{break-after:avoid}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
-
-<div class="wrap">
-  <div class="lede">
-    <h1>Какой размер у этого исследования?</h1>
-    <p>Отметьте всё, что верно про задачу. Размер, срок для заказчика и блок времени посчитаются сами — снизу видно, какой критерий что потянул.</p>
-  </div>
-
-  <div class="result" id="result"></div>
-
-  <div id="checklist"></div>
-
-  <div class="footer">
-    <button class="reset" id="reset">Сбросить</button>
-  </div>
+</head>
+<body>
+<main class="wrap">
+<header class="top"><div class="brand">Бизнес-исследования</div><div class="meta">Калькулятор сроков</div></header>
+<div class="intro"><h1>Когда выйдет исследование?</h1><p>Выберите, что нужно подготовить. Получите срок в рабочих днях и график от заявки до публикации — с учётом опроса и согласований.</p><p style="margin-top:12px">Это средний срок, комфортный для команды. В исключительных случаях мы можем подготовить материал быстрее — это нужно обсудить отдельно.</p><a class="mobile-link" href="#estimate">Перейти к расчёту ↓</a></div>
+<div class="layout">
+<form class="form-panel" id="planner" novalidate>
+<div class="mode" role="group" aria-label="Тип задачи"><label><input type="radio" name="mode" value="research" checked><span>Материал для публикации</span></label><label><input type="radio" name="mode" value="quick"><span>Быстрый запрос</span></label></div>
+<div id="research-fields">
+<fieldset><legend>Размер исследования</legend><p class="hint">Выберите размер самостоятельно. S/M/L обозначают сложность сбора материала.</p><div class="choices">
+<label class="choice"><input type="radio" name="format" value="s"><span class="text"><strong>Новость</strong><small>Короткий материал с одним главным выводом. Полный цикл от заявки до выхода.</small></span><span class="tag">S</span></label>
+<label class="choice"><input type="radio" name="format" value="m" checked><span class="text"><strong>Стандартное исследование</strong><small>Аналитическая статья: несколько выводов, объяснения и инфографика.</small></span><span class="tag">M</span></label>
+<label class="choice"><input type="radio" name="format" value="l"><span class="text"><strong>Большое исследование</strong><small>Новая для команды тема, расширенный объём или совместная работа с внешним партнёром.</small></span><span class="tag">L</span></label>
+</div></fieldset>
+<fieldset><legend>На чём строим материал?</legend><p class="hint">Выберите источник данных для материала.</p><div class="choices">
+<label class="choice"><input type="radio" name="source" value="data" checked><span class="text"><strong>Данные без нового опроса</strong><small>Например, банковские операции, регистрации бизнеса или данные партнёра.</small></span></label>
+<label class="choice"><input type="radio" name="source" value="survey"><span class="text"><strong>Новый опрос</strong><small>Собираем и анализируем ответы предпринимателей или потребителей.</small></span></label>
+<label class="choice"><input type="radio" name="source" value="both"><span class="text"><strong>Данные и новый опрос</strong><small>Готовим обе части параллельно. К тексту переходим, когда готовы обе.</small></span></label>
+</div><div class="subfields" id="data-fields"><label class="control" for="data-ready">Готовность выгрузки</label><select class="input" id="data-ready" name="dataReady"><option value="no">Выгрузку ещё нужно подготовить</option><option value="yes">Наша выгрузка готова; команда исследования её проверит</option></select><p class="note">Готовая выгрузка убирает 5 дней на её подготовку. Проверка и интерпретация остаются.</p></div>
+<div class="subfields" id="survey-fields" hidden><label class="control" for="questionnaire">Кто готовит анкету и методологию?</label><select class="input" id="questionnaire" name="questionnaire"><option value="team">Команда исследования</option><option value="partner">Партнёр с нашей помощью</option><option value="ready">Уже подготовлены и согласованы с командой</option></select><div id="question-days-field"><label class="control" for="question-days">Дополнительное время на анкету и методологию, раб. дней</label><input class="input" id="question-days" name="questionDays" type="number" min="0" max="120" step="1" placeholder="Необязательно, по умолчанию 0"><p class="note" id="question-note">На подготовку анкеты и методологии может потребоваться дополнительное время в зависимости от сложности. Если оно известно, добавьте его к расчёту.</p></div><div class="notice">На запуск, сбор ответов и обработку заложено 14 рабочих дней: 2 + 7 + 5.</div></div></fieldset>
+<fieldset><legend>Насколько проработана идея?</legend><div class="choices compact"><label class="choice"><input type="radio" name="idea" value="ready" checked><span class="text"><strong>Есть тема и гипотезы</strong><small>Понятно, что проверяем и зачем.</small></span></label><label class="choice"><input type="radio" name="idea" value="develop"><span class="text"><strong>Есть только идея</strong><small>Сформулируем гипотезы вместе: +5 рабочих дней.</small></span></label></div></fieldset>
+<fieldset><legend>Участвует внешний партнёр?</legend><p class="hint">Партнёр вместе с нами выпускает материал и согласует его. Внутренний заказчик или эксперт партнёром здесь не считается.</p><div class="choices compact"><label class="choice"><input type="radio" name="partner" value="no" checked><span class="text"><strong>Нет</strong></span></label><label class="choice"><input type="radio" name="partner" value="yes"><span class="text"><strong>Да, совместное исследование</strong></span></label></div><div id="partner-fields" hidden><label class="inlinecheck" id="partner-data-label"><input type="checkbox" name="partnerData" id="partner-data" checked>Нужна новая выгрузка данных со стороны партнёра</label><p class="note">Для совместного выпуска используем партнёрский порядок работы: 10 дней на согласование идеи, 5 — на первый драфт и 2 — на финальную версию. Данные партнёра учитываются отдельно. Выбранный размер не меняется.</p></div></fieldset>
+<div class="field-block" id="extra-fields" hidden><label class="control" for="extra-days">Дополнительная работа для большого исследования, раб. дней</label><input class="input" id="extra-days" name="extraDays" type="number" min="0" max="120" step="1" placeholder="Необязательно, по умолчанию 0"><p class="note">На новую методологию, сложную выгрузку или расширенный объём может потребоваться дополнительное время. Добавьте его, если срок уже известен.</p></div>
 </div>
-
-<script>
-const SIZES=[
-  {key:'XS', name:'Влётный ответ',            time:'до 4 часов',        client:'сегодня–завтра',                      block:'полдня',           heat:'var(--h0)'},
-  {key:'S',  name:'Быстрое на готовых данных', time:'1–2 дня',           client:'2–3 дня',                             block:'1–2 дня',          heat:'var(--h1)'},
-  {key:'M',  name:'Стандартное исследование',  time:'около недели',      client:'≈ 1 неделя',                          block:'4–5 дней',         heat:'var(--h2)'},
-  {key:'L',  name:'Большое исследование',      time:'2–3 недели',        client:'2–3 недели',                          block:'2–3 недели',       heat:'var(--h3)'},
-  {key:'XL', name:'Партнёрское / федеральное', time:'1–1,5 месяца',      client:'≈ месяц, зависит от согласований',    block:'4–6 недель',       heat:'var(--h4)'},
-  {key:'XXL',name:'Продукт / медиапроект',     time:'от 1,5 месяцев',    client:'от 1,5 мес — точный срок после скоупинга', block:'6+ недель, нужна команда', heat:'var(--h5)'},
-];
-
-const GROUPS=[
-  {title:'⏱ Скорость и срочность', items:[
-    ['Запрос от СМИ — влётный комментарий','XS',0,'fast'],
-    ['Нужен ответ за 1–2 дня','XS',0,'fast'],
-    ['Меньше 4 часов работы аналитика','XS',0,'fast'],
-  ]},
-  {title:'📦 Готовность данных', items:[
-    ['Данные есть в основных показателях','XS–S',1],
-    ['Уже работали с этими данными','XS–S',1],
-    ['Тема или условия — новые для команды','L–XXL',3],
-    ['Нужно разобраться в методологии партнёра','L–XL',3],
-  ]},
-  {title:'🔁 Повторяемость', items:[
-    ['Повторяется регулярно, есть шаблон','S–M',1],
-    ['Обновляем существующее исследование','M',2],
-    ['Ищем свежий инсайт в знакомых данных','M',2],
-  ]},
-  {title:'📤 Формат результата', items:[
-    ['Строится на опросе','S–M',2],
-    ['Опросная + количественная часть','M–L',3],
-    ['Есть датавиз','M–XL',3],
-    ['Отдельный датавиз + дата-сторителлинг в соцсети','XL–XXL',4],
-    ['Федеральные / региональные версии пресс-релиза','L–XXL',4],
-    ['Это тренд-репорт','L–XL',3],
-    ['Нужна разработка (лендинг, данные, видео)','XXL',5,'floor'],
-    ['Около-продукт или большой медиапроект','XXL',5,'floor'],
-  ]},
-  {title:'🤝 Участники и согласования', items:[
-    ['Партнёрское исследование (риск задержек)','L–XXL',4],
-    ['Несколько команд / внешних стейкхолдеров, нет ИП','XL–XXL',4],
-  ]},
-  {title:'🎯 Ценность и охват', items:[
-    ['Есть прямая польза для предпринимателя','M–XXL',2],
-    ['Нужны федеральные охваты и широкая аудитория','L–XXL',3],
-  ]},
-];
-
-// flatten
-const TRIGGERS=[];
-GROUPS.forEach((g,gi)=>g.items.forEach(it=>TRIGGERS.push(
-  {label:it[0],range:it[1],rep:it[2],kind:it[3]||'normal',group:gi})));
-
-const state=new Set();
-
-// Несовместимо с влётной задачей день-в-день:
-const HEAVY=new Set([
-  'Нужна разработка (лендинг, данные, видео)',
-  'Около-продукт или большой медиапроект',
-  'Федеральные / региональные версии пресс-релиза',
-]);
-// Знакомые данные — снимают конфликт срочности:
-const READY=new Set([
-  'Данные есть в основных показателях',
-  'Уже работали с этими данными',
-]);
-
-function compute(){
-  const chosen=[...state].map(i=>TRIGGERS[i]);
-  if(!chosen.length) return {empty:true};
-  const floor=chosen.some(t=>t.kind==='floor');
-  const maxRep=floor?5:Math.max(...chosen.map(t=>t.rep));
-  const idx=floor?5:maxRep;
-  const drivers=chosen.filter(t=> floor ? t.kind==='floor' : t.rep===maxRep);
-  const support=chosen.filter(t=>!drivers.includes(t));
-
-  const urgent=chosen.some(t=>t.kind==='fast');
-  const ready=chosen.some(t=>READY.has(t.label));
-  const heavyHit=chosen.filter(t=>HEAVY.has(t.label));
-  const error=urgent && heavyHit.length>0 && !ready;
-  // мягкое предупреждение — для прочих срочно+тяжело; знакомые данные его тоже снимают
-  const conflict=!error && urgent && idx>=3 && !ready;
-  return {idx,drivers,support,conflict,error,heavyHit,ready,count:chosen.length};
+<div id="quick-fields" hidden><fieldset><legend>Что нужно?</legend><div class="choices">
+<label class="choice"><input type="radio" name="quickType" value="existing" checked><span class="text"><strong>Цифра или комментарий по готовым исследованиям</strong><small>По исследованиям, которые уже были. 1 рабочий день.</small></span></label>
+<label class="choice"><input type="radio" name="quickType" value="new"><span class="text"><strong>Новая цифра</strong><small>До 4 рабочих дней в зависимости от загрузки команды.</small></span></label>
+</div><p class="note">Срок считаем с планового старта работы.</p></fieldset></div>
+<fieldset class="field-block"><legend>Когда планируем?</legend><div class="two"><div><label class="control" for="request-date">Дата запроса</label><input class="input" type="date" id="request-date" name="requestDate" min="2026-01-01" max="2027-12-31" required></div><div><label class="control" for="start-date">Плановый старт работы</label><input class="input" type="date" id="start-date" name="startDate" min="2026-01-01" max="2027-12-31" required></div></div><p class="notice" id="queue-inline" role="status"></p><label class="inlinecheck"><input type="checkbox" id="start-confirmed" name="confirmed">Дата старта согласована с командой</label><p class="note">По умолчанию считаем старт от даты запроса. Если команда занята, поставьте доступную дату: ожидание покажем отдельно.</p><label class="control" for="deadline">Желаемая дата выпуска <span class="meta">· необязательно</span></label><input class="input" type="date" id="deadline" name="deadline" min="2026-01-01" max="2027-12-31"><p class="note">Дедлайн не сокращает этапы. Калькулятор покажет, укладывается ли в него план.</p><details style="margin-top:14px"><summary>Паузы и календарь</summary><p>Учтены федеральные выходные и переносы РФ на 2026–2027 годы. Сокращённый рабочий день считается за один день. Другие даты требуют обновления календаря.</p><label class="control" for="pauses">Дополнительные нерабочие даты или периоды</label><textarea class="input" id="pauses" name="pauses" rows="3" placeholder="2026-11-16&#10;2026-12-21..2026-12-25" aria-describedby="pause-help"></textarea><p class="note" id="pause-help">Одна дата или диапазон на строку: ГГГГ-ММ-ДД..ГГГГ-ММ-ДД. Для общих пауз проекта, например отпусков или ожидания ответа.</p></details><p class="note date-error" id="form-errors" role="alert"></p></fieldset>
+<div style="margin-top:22px"><button class="text-btn" id="reset-plan" type="button">Сбросить настройки</button><p class="status" id="reset-status" role="status"></p></div>
+</form>
+<aside class="sidebar" id="estimate" aria-label="Результат расчёта"><div class="result"><div id="result-body"></div><div class="actions"><button class="btn primary" id="copy" type="button">Скопировать план</button><button class="btn" id="print" type="button">Печать</button></div><div class="status" id="copy-status" role="status"></div><div id="copy-fallback" hidden><label for="copy-text">Не удалось скопировать автоматически. Выделите текст и скопируйте:</label><textarea id="copy-text" class="input" readonly></textarea></div></div><div class="side-foot"><p>Расчёт помогает обсудить сроки. Заявка не отправляется, место в плане команды не бронируется.</p><p>Один рабочий день старта считается первым днём работы. Выходные и паузы не расходуют срок этапа.</p><a href="#schedule">Посмотреть этапы ↓</a></div></aside>
+</div>
+<section class="timeline" id="schedule" aria-labelledby="schedule-title"><div class="section-title"><h2 id="schedule-title">Из чего складывается срок</h2><span id="schedule-caption">Рабочие дни · до публикации</span></div><p class="hint" id="schedule-note">Последовательные этапы складываются; параллельные идут одновременно.</p><div class="ribbon" id="ribbon" aria-hidden="true"></div><div class="table-scroll"><table><thead><tr><th scope="col">Этап и результат</th><th scope="col">Дней</th><th scope="col">Даты</th></tr></thead><tbody id="stages"></tbody></table></div></section>
+<section class="method"><details id="method"><summary>Как устроен расчёт</summary><ul>
+<li>Новость: 2 + 11 + 4 + 2 + 4 + 4 = <b>27 рабочих дней</b>. В последнем блоке параллельно идут проверки и подготовка выпуска; корректура завершается после правок, публикация — после вычитки и выхода в СМИ. Инфографика в новость не включена.</li>
+<li>Стандартное исследование: 3 + 11 + 5 + 19 + 5 = <b>43 рабочих дня</b>. Четыре дня инфографики входят в параллельную работу над текстом и повторно к итогу не прибавляются.</li>
+<li>Полный партнёрский флоу: 13 + 22 + 5 + 26 + 5 = <b>71 рабочий день</b>.</li>
+<li>Опрос: 2 дня на запуск, 7 на сбор и 5 на обработку — <b>14 рабочих дней</b>. На подготовку анкеты и методологии может потребоваться дополнительное время в зависимости от сложности. Сочетание с данными считается как максимум двух параллельных веток, включая подготовку анкеты в опросной ветке.</li>
+<li>S/M/L обозначают сложность сбора материала.</li>
+<li>Если партнёр задерживает данные или согласование, план пересматривается; после месяца без данных задача отменяется по партнёрскому флоу.</li>
+<li>Спецпроекты и тренд-репорты в калькулятор не входят. Для нескольких самостоятельных выпусков нужен отдельный план.</li>
+</ul><p>Календарь: постановления Правительства РФ о переносах на <a href="https://government.ru/docs/56309/" target="_blank" rel="noopener">2026 год</a> и <a href="https://government.ru/docs/59913/" target="_blank" rel="noopener">2027 год</a>. Федеральная пятидневная неделя.</p></details></section>
+<footer><span>Бизнес-исследования · план от запроса до результата</span><span>Расчёт выполняется в браузере. Данные формы никуда не отправляются.</span></footer>
+<p class="sr-only" role="status" aria-live="polite" id="live-result"></p>
+</main>
+<script id="planner-engine">
+'use strict';
+const HOLIDAYS=new Set(['2026-01-01','2026-01-02','2026-01-05','2026-01-06','2026-01-07','2026-01-08','2026-01-09','2026-02-23','2026-03-09','2026-05-01','2026-05-11','2026-06-12','2026-11-04','2026-12-31','2027-01-01','2027-01-04','2027-01-05','2027-01-06','2027-01-07','2027-01-08','2027-02-22','2027-02-23','2027-03-08','2027-05-03','2027-05-10','2027-06-14','2027-11-04','2027-11-05','2027-12-31']);
+const WORKING_WEEKENDS=new Set(['2027-02-20']);
+const DAY=86400000;
+function iso(d){return d.toISOString().slice(0,10)}
+function parseDate(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s))return null;const d=new Date(s+'T12:00:00Z');return !isNaN(d)&&iso(d)===s?d:null}
+function nextDay(d){return new Date(d.getTime()+DAY)}
+function inCalendar(d){return d&&d.getUTCFullYear()>=2026&&d.getUTCFullYear()<=2027}
+function workday(d,pauses=new Set()){const s=iso(d);return !pauses.has(s)&&(WORKING_WEEKENDS.has(s)||(![0,6].includes(d.getUTCDay())&&!HOLIDAYS.has(s)))}
+function nextWork(d,pauses){let n=0;while(!workday(d,pauses)&&n++<2000)d=nextDay(d);return d}
+function dateAt(start,offset,pauses){let d=nextWork(new Date(start),pauses);for(let i=0;i<offset;i++)d=nextWork(nextDay(d),pauses);return d}
+function countWork(a,b,pauses){let n=0;for(let d=new Date(a);d<b;d=nextDay(d))if(workday(d,pauses))n++;return n}
+function parsePauses(raw){const set=new Set();for(const line of raw.split(/[\n,;]+/).map(x=>x.trim()).filter(Boolean)){const parts=line.split('..');if(parts.length>2)throw Error('Проверьте формат пауз: дата или две даты через «..».');const a=parseDate(parts[0]),b=parseDate(parts[1]||parts[0]);if(!inCalendar(a)||!inCalendar(b)||a>b)throw Error('В паузах нужны корректные даты 2026–2027 годов; конец не может быть раньше начала.');for(let d=a;d<=b;d=nextDay(d))set.add(iso(d));}return set}
+function integer(value,min,max){return value!==''&&Number.isInteger(Number(value))&&Number(value)>=min&&Number(value)<=max?Number(value):null}
+function makePlan(s){
+ const rows=[],missing=[],warnings=[];let cursor=0;
+ const add=(name,days,detail='',kind='normal')=>{rows.push({name,days,detail,kind,offset:cursor});if(days!==null)cursor+=days;else missing.push(name)};
+ if(s.mode==='quick'){const fresh=s.quickType==='new';add(fresh?'Подготовка новой цифры':'Цифра или комментарий по готовым исследованиям',fresh?4:1,fresh?'До 4 рабочих дней в зависимости от загрузки команды.':'По исследованиям, которые уже были. 1 рабочий день.');return {rows,total:cursor,missing,warnings:[],size:'—',name:'Быстрый запрос',upperBound:fresh}}
+ const partner=s.partner==='yes',news=s.format==='s'&&!partner;
+ const large=s.format==='l';
+ const hasData=s.source!=='survey',hasSurvey=s.source!=='data';
+ if(s.idea==='develop')add('Проработка идеи и гипотез',5,'Формулируем гипотезы и задачи исследования.');
+ if(partner)add('Согласование идеи с партнёром',10,'Фиксируем идею, роли и состав данных.');
+ add(news?'Заявка и оценка новостного потенциала':'Подготовка и согласование заявки',news?2:3,'Тема, гипотезы, аудитория, польза и необходимые данные.');
+ const extra=large?integer(s.extraDays||'0',0,120):0;
+ if(extra!==0)add('Дополнительная работа по теме и объёму',extra,'Дополнительное время, указанное в расчёте.');
+ let dataDays=0,surveyDays=0,q=0;
+ if(hasData)dataDays=(s.dataReady==='yes'?6:11)+(partner&&s.partnerData?11:0);
+ if(hasSurvey){q=s.questionnaire==='ready'?0:integer(s.questionDays||'0',0,120);if(q===null)missing.push('Подготовка анкеты и методологии');surveyDays=(q||0)+(s.questionnaire==='partner'?3:0)+14;}
+ const off=cursor;
+ const branch=[];
+ if(hasData)branch.push({name:partner&&s.partnerData?'Данные команды и партнёра':'Данные команды',days:dataDays,detail:(s.dataReady==='yes'?'Выгрузка команды готова; проверка — 2 дня, интерпретация — 4.':'Выгрузка — 5 дней, проверка — 2, интерпретация — 4.')+(partner&&s.partnerData?' Данные партнёра добавляют 11 дней с учётом частичного перекрытия выгрузок по флоу.':''),offset:off,kind:'branch'});
+ if(hasSurvey)branch.push({name:'Опрос: от анкеты до выводов',days:q===null?null:surveyDays,knownDays:surveyDays,detail:`Анкета и методология — ${q===null?'введите от 0 до 120 дней':s.questionnaire==='ready'?'готовы':q>0?q+' дополнительных дн.':'дополнительное время не добавлено'}${s.questionnaire==='partner'?'; наша помощь с анкетой партнёра — 3 дн.':''}; запуск — 2, сбор ответов — 7, обработка — 5.`,offset:off,kind:'branch'});
+ const blockDays=Math.max(dataDays,surveyDays);
+ rows.push({name:hasData&&hasSurvey?'Данные и опрос — параллельно':hasSurvey?'Подготовка и проведение опроса':'Работа с данными',days:q===null?null:blockDays,knownDays:blockDays,detail:hasData&&hasSurvey?'Длительность блока равна более длинной ветке. Следующий этап — после готовности обеих.':'Готовим факты, выводы и ограничения для материала.',kind:hasData&&hasSurvey?'parallel':'normal',offset:off,branch});cursor+=blockDays;
+ if(hasSurvey&&s.questionnaire!=='ready'&&q===0)warnings.push('На подготовку анкеты и методологии может потребоваться дополнительное время в зависимости от сложности. Оно пока не добавлено к расчёту.');
+ if(!news)add('Подготовка и согласование структуры',5,'Структура — 2 дня, редакторская проверка — 2, доработка — 1.');
+ add('Написание первого драфта',4,'Полный текст с выводами и объяснениями.');
+ if(partner)add('Проверка первого драфта партнёром',5,'Комментарии партнёра по смыслу, логике и данным.');
+ if(news){add('Редакторская проверка',2,'Комментарии по смыслу, логике и данным.');add('Доработка текста',4,'Автор вносит редакторские правки.');add('Проверки, финализация и выпуск',4,'Проверка экспертом и продуктом; финализация, подключение продвижения, корректура и публикация. Корректура — после правок, выпуск — после вычитки и выхода в СМИ.', 'parallel');}
+ else{add('Два круга редактуры и доработки',10,'Первый чек — 3 дня, доработка — 3, второй чек — 2, финализация и передача ТЗ — 2. Подключаем продвижение.');add('Проверки экспертом и продуктом',3,'Проверяем выводы, факты и интеграции. Инфографика занимает 4 дня параллельно проверкам и финализации текста; к общему сроку повторно не прибавляется.', 'parallel');if(partner)add('Утверждение текста партнёром',2,'Финальные комментарии и согласование результата.');add('Финализация текста и пресс-релиза',2,'Собираем финальный пакет материалов.');add('Корректура',1,'Вычитываем полный пакет.');add('Дизайн и вёрстка',2,'Собираем страницу из готового текста и инфографики.');add('Питчинг и проверка вёрстки',1,'Отправляем материал СМИ и проверяем страницу одновременно.','parallel');add('Публикация',1,'Выход в СМИ и на сайте.');}
+ return {rows,total:cursor,missing:[...new Set(missing)],warnings,size:s.format.toUpperCase(),name:partner?'Партнёрское исследование':news?'Новость':large?'Большое исследование':'Стандартное исследование'};
 }
-
-function el(html){const t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstChild;}
-
-function renderResult(){
-  const r=compute();
-  const box=document.getElementById('result');
-  const track=`<div class="track">${SIZES.map((s,i)=>{
-    const on=!r.empty && i<=r.idx, cur=!r.empty && i===r.idx;
-    return `<div class="seg ${on?'on':''} ${cur?'cur':''}"><div class="bar" style="${on?`background:${s.heat}`:''}"></div><div class="lab">${s.key}</div></div>`;
-  }).join('')}</div>`;
-
-  if(r.empty){
-    box.innerHTML=`<div class="res-top"><div class="badge" style="background:#C8CDDB"><div class="sz">?</div></div>
-      <div class="res-body"><div class="res-empty">Отметьте критерии ниже — размер появится здесь.</div></div></div>${track}`;
-    return;
-  }
-  const s=SIZES[r.idx];
-  const drv=r.drivers.map(d=>`«${d.label}»`).join(', ');
-  const sup=r.support.length?`<div style="margin-top:5px">Поддерживают: ${r.support.map(d=>d.label).join(', ')}.</div>`:'';
-  box.innerHTML=`
-    <div class="res-top">
-      <div class="badge" style="background:${s.heat}">
-        <div class="sz">${s.key}</div><div class="cnt">${r.count} ${plural(r.count)}</div>
-      </div>
-      <div class="res-body">
-        <div class="res-name">${s.name}</div>
-        <div class="facts">
-          <div class="fact"><div class="k">Время на драфт</div><div class="v">${s.time}</div></div>
-          <div class="fact"><div class="k">В календарь</div><div class="v">${s.block}</div></div>
-          <div class="fact" style="grid-column:1/-1"><div class="k">Ответ заказчику по сроку</div><div class="v">${s.client}</div></div>
-        </div>
-      </div>
-    </div>
-    ${track}
-    ${r.error?`<div class="err">⛔ Так не получится: влётную задачу день-в-день нельзя ставить параллельно с «${r.heavyHit.map(h=>h.label).join('», «')}». Уберите одно из двух — либо отметьте, что данные знакомы, тогда успеете.</div>`:''}
-    <div class="why">Размер задаёт <b>${drv}</b>.${sup}</div>
-    ${r.conflict?`<div class="warn">⚠ Срочный запрос, но по содержанию это ${s.key}. Так быстро не выйдет без потери качества — урежьте скоуп или подвиньте срок и проговорите это с заказчиком.</div>`:''}`;
-}
-
-function plural(n){const a=n%10,b=n%100;if(a===1&&b!==11)return'критерий';if(a>=2&&a<=4&&(b<10||b>=20))return'критерия';return'критериев'}
-
-function renderChecklist(){
-  const root=document.getElementById('checklist');
-  root.innerHTML='';
-  GROUPS.forEach((g,gi)=>{
-    const idxs=TRIGGERS.map((t,i)=>i).filter(i=>TRIGGERS[i].group===gi);
-    const sel=idxs.filter(i=>state.has(i)).length;
-    const grp=el(`<div class="group">
-      <div class="group-h"><span>${g.title}</span><span class="gc ${sel?'has':''}">${sel?sel+' / ':''}${idxs.length}</span></div>
-      <div class="rows"></div></div>`);
-    const rows=grp.querySelector('.rows');
-    idxs.forEach(i=>{
-      const t=TRIGGERS[i];
-      const row=el(`<div class="row ${state.has(i)?'sel':''}" data-i="${i}" role="checkbox" tabindex="0" aria-checked="${state.has(i)}">
-        <div class="box"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div>
-        <div class="txt">${t.label}</div><div class="pill">${t.range}</div></div>`);
-      const toggle=()=>{state.has(i)?state.delete(i):state.add(i);renderChecklist();renderResult();};
-      row.addEventListener('click',toggle);
-      row.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();toggle();}});
-      rows.appendChild(row);
-    });
-    root.appendChild(grp);
-  });
-}
-
-document.getElementById('reset').addEventListener('click',()=>{state.clear();renderChecklist();renderResult();});
-renderChecklist();renderResult();
 </script>
-
+<script>
+const form=document.getElementById('planner'),$=id=>document.getElementById(id);
+const read=()=>Object.fromEntries(new FormData(form));
+let current=null,lastRequest='',confirmedStart=null;
+function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function nice(d,year=true){return new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'short',...(year?{year:'numeric'}:{}),timeZone:'UTC'}).format(d).replace(' г.','')}
+function calendarWeeks(start,finish,upper=false){const days=Math.max(1,Math.round((finish-start)/DAY)+1);if(days<7)return upper?'До 1 недели':'Меньше недели';const weeks=upper?Math.ceil(days/7*10)/10:Math.round(days/7*10)/10;return (upper?'До ':'≈ ')+new Intl.NumberFormat('ru-RU',{maximumFractionDigits:1}).format(weeks)+' нед.';}
+function radio(name,value){form.querySelector(`input[name="${name}"][value="${value}"]`).checked=true}
+function toggle(id,show){$(id).hidden=!show}
+function sync(){const s=read(),quick=s.mode==='quick',survey=s.source!=='data',hasData=s.source!=='survey',partner=s.partner==='yes';
+ toggle('research-fields',!quick);toggle('quick-fields',quick);toggle('data-fields',hasData);toggle('survey-fields',survey);toggle('question-days-field',s.questionnaire!=='ready');toggle('partner-fields',partner);toggle('partner-data-label',hasData);toggle('extra-fields',!quick&&s.format==='l');
+ $('question-note').textContent='На подготовку анкеты и методологии может потребоваться дополнительное время в зависимости от сложности. Если оно известно, добавьте его к расчёту.'+(s.questionnaire==='partner'?' Помощь с анкетой партнёра уже добавляет 3 рабочих дня.':'');
+ return s;}
+function computeDates(s,p){const errors=[];let pauses=new Set();try{pauses=parsePauses(s.pauses||'')}catch(e){errors.push(e.message)}const request=parseDate(s.requestDate),rawStart=parseDate(s.startDate),deadline=s.deadline?parseDate(s.deadline):null;
+ if(!inCalendar(request)||!inCalendar(rawStart))errors.push('Укажите даты запроса и старта в пределах 2026–2027 годов.');
+ if(request&&rawStart&&rawStart<request)errors.push('Старт не может быть раньше запроса. Измените одну из дат.');
+ if(s.deadline&&!inCalendar(deadline))errors.push('Укажите корректный дедлайн в пределах 2026–2027 годов.');
+ if(request&&deadline&&deadline<request)errors.push('Желаемая дата выпуска не может быть раньше запроса.');
+ if(errors.length)return {errors,pauses};
+ const start=nextWork(rawStart,pauses),finish=p.missing.length?null:dateAt(start,p.total-1,pauses);
+ if(!inCalendar(start)||(finish&&!inCalendar(finish)))errors.push('План выходит за пределы календаря 2026–2027. Срок в рабочих днях рассчитан, для дат нужно обновить календарь.');
+ return {errors,pauses,request,start,finish:errors.length?null:finish,deadline,queue:countWork(request,start,new Set()),totalWait:finish?countWork(request,nextDay(finish),new Set()):null,shifted:iso(start)!==s.startDate};}
+function render(){const s=sync(),p=makePlan(s),d=computeDates(s,p);if(s.confirmed&&(!d.start||iso(d.start)!==confirmedStart)){$('start-confirmed').checked=false;delete s.confirmed;confirmedStart=null;}const valid=!d.errors.length,complete=valid&&!p.missing.length,range=(offset,days)=>complete&&days?nice(dateAt(d.start,offset,d.pauses),false)+' — '+nice(dateAt(d.start,offset+days-1,d.pauses),false):days===0?'Не требуется':'После оценки';
+ current={s,p,d,complete};$('queue-inline').textContent=valid?'Ожидание в очереди: '+d.queue+' раб. дн. Это время между запросом и стартом работы.':'Ожидание в очереди появится после заполнения корректных дат.';$('reset-status').textContent='';$('form-errors').textContent=d.errors.join(' ');$('request-date').setAttribute('aria-invalid',String(!inCalendar(parseDate(s.requestDate))));$('start-date').setAttribute('aria-invalid',String(!!d.errors.length));
+ const knownLabel=p.missing.length?' + неоценённые этапы':' до '+(s.mode==='quick'?'ответа':'выпуска');
+ let deadline='';if(complete&&d.deadline){const gap=Math.round((d.deadline-d.finish)/DAY);deadline=`<div class="notice ${gap<0?'warn':''}">${gap>=0?'План укладывается в желаемую дату. Запас: '+gap+' календ. дн.':'План позже желаемой даты на '+(-gap)+' календ. дн. Сократить срок можно только после пересмотра объёма или флоу.'}</div>`;}
+ const assumptions=[];if(!s.confirmed)assumptions.push('Старт пока не подтверждён командой.');if(d.shifted&&valid)assumptions.push('Старт перенесён на ближайший рабочий день.');
+ $('result-body').innerHTML=`<div class="result-head"><span class="size">${p.size}</span><span>${p.name}</span></div><h2 class="duration">${p.missing.length?'От ':p.upperBound?'До ':''}${p.total} раб. дн.</h2><p class="result-sub">${esc(knownLabel)}. ${p.missing.length?'Оцените недостающие этапы, чтобы получить дату.':(s.mode==='quick'?(p.upperBound?'Срок подготовки новой цифры зависит от загрузки команды.':'Цифра или комментарий по исследованиям, которые уже были.'):'По выбранному сценарию, с редактурой и согласованиями.')}</p>${complete?`<p class="weeks">${calendarWeeks(d.start,d.finish,p.upperBound)} по календарю от старта</p>`:''}<dl class="summary"><div><dt>Запрос</dt><dd>${d.request?nice(d.request):'—'}</dd></div><div><dt>Старт работы</dt><dd>${valid?nice(d.start):'Проверьте даты'}</dd></div><div><dt>Ожидание в очереди</dt><dd>${valid?d.queue+' раб. дн.':'—'}</dd></div><div class="release"><dt>${s.mode==='quick'?(p.upperBound?'Плановый ответ — до':'Плановый ответ'):'Плановый выпуск'}</dt><dd>${complete?nice(d.finish):'Нужна оценка'}</dd></div>${complete?`<div><dt>От запроса до результата</dt><dd>${p.upperBound?'до ':''}${d.totalWait} раб. дн.<br><span class="meta">${calendarWeeks(d.request,d.finish,p.upperBound)}</span></dd></div>`:''}</dl>${p.missing.length?`<div class="notice warn"><b>Нужно уточнить:</b><br>${p.missing.map(esc).join('<br>')}</div>`:''}${d.errors.length?`<div class="notice warn">${d.errors.map(esc).join('<br>')}</div>`:''}${deadline}${p.warnings.map(w=>`<div class="notice">${esc(w)}</div>`).join('')}<div class="assumptions">${assumptions.map(esc).join(' ')} Календарь РФ, 2026–2027. ${s.pauses.trim()?'Добавлены паузы проекта.':''}</div>`;
+ $('ribbon').innerHTML=p.rows.filter(r=>r.days).map(r=>`<span style="flex:${r.days}" title="${esc(r.name)}: ${r.days} дн."></span>`).join('');
+ $('schedule-caption').textContent=s.mode==='quick'?'Рабочие дни · до ответа':'Рабочие дни · до публикации';
+ $('schedule-note').textContent=p.missing.length?'Показаны известные сроки. Даты этапов появятся после оценки недостающей работы.':s.mode==='quick'?(p.upperBound?'Новая цифра: до 4 рабочих дней в зависимости от загрузки команды.':'Цифра или комментарий по готовым исследованиям: 1 рабочий день.'):'Последовательные этапы складываются; параллельные идут одновременно.';
+ $('stages').innerHTML=p.rows.map(r=>`<tr><td>${esc(r.name)}${r.kind==='parallel'?'<span class="parallel">параллельно</span>':''}<small>${esc(r.detail)}</small>${r.branch?r.branch.map(b=>`<small><b>${esc(b.name)}:</b> ${b.days===null?b.knownDays+' дн. + анкета':b.days+' дн.'}. ${esc(b.detail)}</small>`).join(''):''}</td><td>${r.days===null?(r.knownDays?r.knownDays+' + ?':'?'):(p.upperBound?'до ':'')+r.days}</td><td>${complete?range(r.offset,r.days):'—'}</td></tr>`).join('')+`<tr class="total-row"><td>Итого работы${p.missing.length?' без неоценённых этапов':''}</td><td>${p.missing.length?'от ':p.upperBound?'до ':''}${p.total}</td><td>${complete?nice(d.finish):'—'}</td></tr>`;
+ $('live-result').textContent=`${p.name}. ${p.missing.length?'От ':p.upperBound?'До ':''}${p.total} рабочих дней. ${complete?(s.mode==='quick'?'Плановый ответ':'Плановый выпуск')+(p.upperBound?' до ':' ')+nice(d.finish):'Нужна оценка или проверка дат.'}`;
+ $('copy-status').textContent='';$('copy-fallback').hidden=true;
+}
+function planText(){const {s,p,d,complete}=current;const lines=[`${p.name} (${p.size})`,`${p.missing.length?'От ':p.upperBound?'До ':''}${p.total} рабочих дней работы${p.missing.length?' + неоценённые этапы':''}.`,'Источник: '+({data:'данные без нового опроса',survey:'новый опрос',both:'данные и новый опрос'}[s.source]||'')];if(s.mode==='quick')lines.pop();if(d.request)lines.push('Дата запроса: '+nice(d.request));if(!d.errors.length)lines.push('Старт: '+nice(d.start)+(s.confirmed?' (согласован)':' (не подтверждён)'),`Ожидание в очереди: ${d.queue} раб. дн.`);if(complete)lines.push('Срок от старта: '+calendarWeeks(d.start,d.finish,p.upperBound)+' по календарю.','Плановый результат: '+(p.upperBound?'до ':'')+nice(d.finish),`От запроса до результата: ${p.upperBound?'до ':''}${d.totalWait} раб. дн. (${calendarWeeks(d.request,d.finish,p.upperBound)})`);if(d.deadline)lines.push('Желаемая дата: '+nice(d.deadline));lines.push('','Этапы:');for(const r of p.rows){lines.push(`• ${r.name}: ${r.days===null?(r.knownDays?r.knownDays+' + оценка': 'нужна оценка'):(p.upperBound?'до ':'')+r.days} раб. дн.${r.kind==='parallel'?' (параллельно)':''}${complete&&r.days?' | '+nice(dateAt(d.start,r.offset,d.pauses))+' — '+nice(dateAt(d.start,r.offset+r.days-1,d.pauses)):''}`,r.detail);if(r.branch)r.branch.forEach(b=>lines.push(`  ${b.name}: ${b.days===null?b.knownDays+' + анкета':b.days} дн. ${b.detail}`));}if(p.missing.length)lines.push('','Нужно оценить: '+p.missing.join('; '));lines.push('',...d.errors,...p.warnings,'Календарь РФ 2026–2027; рабочий день старта — первый день работы.');if(s.pauses.trim())lines.push('Дополнительные паузы:\n'+s.pauses.trim());lines.push('Расчёт для планирования; заявку не отправляет и место в плане не бронирует.');return lines.join('\n');}
+function resetPlan(preserveMode=false){const selectedMode=preserveMode?read().mode:'research';HTMLFormElement.prototype.reset.call(form);radio('mode',selectedMode||'research');const t=new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Moscow',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());$('request-date').value=t;$('start-date').value=t;lastRequest=t;confirmedStart=null;render();}
+form.addEventListener('change',e=>{if(e.target.id==='start-confirmed'){confirmedStart=e.target.checked&&current.d.start?iso(current.d.start):null;}if(e.target.id==='request-date'){if($('start-date').value===lastRequest)$('start-date').value=e.target.value;lastRequest=e.target.value;}render()});
+form.addEventListener('input',e=>{if(['number','date','textarea'].includes(e.target.type)||e.target.tagName==='TEXTAREA')render()});
+form.addEventListener('submit',e=>e.preventDefault());$('reset-plan').addEventListener('click',()=>{resetPlan(true);$('reset-status').textContent=current.s.mode==='quick'?'Настройки сброшены. Быстрый запрос: цифра или комментарий по готовым исследованиям, 1 рабочий день.':'Настройки сброшены. Стандартное исследование, данные без опроса, 43 рабочих дня.';});
+$('copy').addEventListener('click',async()=>{const txt=planText();try{await navigator.clipboard.writeText(txt);$('copy-status').textContent='План скопирован — можно вставить в заявку.';}catch{$('copy-fallback').hidden=false;$('copy-text').value=txt;$('copy-text').focus();$('copy-text').select();}});
+$('print').addEventListener('click',()=>window.print());
+resetPlan();
+</script>
+</body>
 </html>
