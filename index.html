@@ -13,47 +13,47 @@
 @media(max-width:380px){.compact,.two{grid-template-columns:1fr}.top{align-items:flex-start}.brand{max-width:140px}}
 @media print{body{background:white}.wrap{padding:0;max-width:none}.top,.intro,.form-panel,.side-foot,.actions,.mobile-link,.method,footer,.status{display:none!important}.layout{display:block}.sidebar{position:static}.result{padding:0}.timeline{padding:0;margin-top:22px}.result-sub,.notice{margin:8px 0}.summary div{padding:5px 0}.duration{margin:12px 0}.ribbon{display:none}tr{break-inside:avoid}table{font-size:11px}td{padding:7px}h2{break-after:avoid}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.duration-weeks{font-size:16px;line-height:1.5;font-weight:550;color:var(--muted);letter-spacing:0}.plan-condition{margin:16px 0 20px}.plan-condition p{margin:0}.plan-condition .note{margin-top:7px}.date-error:empty{display:none}#additional-times>summary{font-size:15px}#additional-times[open]>summary{margin-bottom:8px}
+.stage-details{margin-top:4px}.stage-details>summary{font-size:12.5px;font-weight:550;color:var(--accent);padding:8px 0;min-height:36px}.stage-content p{font-size:12.5px;line-height:1.5;margin:4px 0 10px;max-width:65ch}.stage-content p:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
 <main class="wrap">
 <header class="top"><div class="brand">Бизнес-исследования</div><div class="meta">Калькулятор сроков</div></header>
-<div class="intro"><h1>Когда выйдет исследование?</h1><p>Выберите, что нужно подготовить. Получите срок в рабочих днях и график от заявки до публикации — с учётом опроса и согласований.</p><p style="margin-top:12px">Это средний срок, комфортный для команды. В исключительных случаях мы можем подготовить материал быстрее — это нужно обсудить отдельно.</p><a class="mobile-link" href="#estimate">Перейти к расчёту ↓</a></div>
+<div class="intro"><h1 id="page-title">Когда выйдет исследование?</h1><p id="intro-description">Выберите, что нужно подготовить. Получите срок в рабочих днях и график от заявки до публикации — с учётом опроса и согласований.</p><p style="margin-top:12px">Это максимальная оценка времени для выбранных условий, с комфортным для команды запасом. Возможность получить результат быстрее нужно обсудить отдельно.</p><p style="margin-top:12px"><a href="https://blink.bank24.int/3wb6orjqwd/pages/f7c42992-e76a-4315-8cc6-5b469de26f67" target="_blank" rel="noopener noreferrer" aria-label="Как заказать исследование: гайд (откроется в новой вкладке)">Как заказать исследование: гайд</a></p><a class="mobile-link" href="#estimate">Перейти к расчёту ↓</a></div>
 <div class="layout">
 <form class="form-panel" id="planner" novalidate>
 <div class="mode" role="group" aria-label="Тип задачи"><label><input type="radio" name="mode" value="research" checked><span>Материал для публикации</span></label><label><input type="radio" name="mode" value="quick"><span>Быстрый запрос</span></label></div>
 <div id="research-fields">
-<fieldset><legend>Размер исследования</legend><p class="hint">Выберите размер самостоятельно. S/M/L обозначают сложность сбора материала.</p><div class="choices">
-<label class="choice"><input type="radio" name="format" value="s"><span class="text"><strong>Новость</strong><small>Короткий материал с одним главным выводом. Полный цикл от заявки до выхода.</small></span><span class="tag">S</span></label>
-<label class="choice"><input type="radio" name="format" value="m" checked><span class="text"><strong>Стандартное исследование</strong><small>Аналитическая статья: несколько выводов, объяснения и инфографика.</small></span><span class="tag">M</span></label>
-<label class="choice"><input type="radio" name="format" value="l"><span class="text"><strong>Большое исследование</strong><small>Новая для команды тема, расширенный объём или совместная работа с внешним партнёром.</small></span><span class="tag">L</span></label>
-</div></fieldset>
+<fieldset><legend>Что нужно подготовить?</legend><div class="choices">
+<label class="choice"><input type="radio" name="format" value="news"><span class="text"><strong>Новость</strong><small>Короткий материал с одним главным выводом.</small></span></label>
+<label class="choice"><input type="radio" name="format" value="research" checked><span class="text"><strong>Исследование</strong><small>Аналитическая статья: несколько выводов, объяснения и инфографика.</small></span></label>
+<label class="choice"><input type="radio" name="format" value="partner"><span class="text"><strong>Партнёрский материал</strong><small>(Может выйти и новостью, и исследованием. Срок увеличивается из-за дополнительных этапов согласования с партнёром.)</small></span></label>
+</div><div id="partner-fields" hidden><p class="note">Партнёр вместе с нами выпускает материал и согласует его. Внутренний заказчик или эксперт партнёром здесь не считается.</p><label class="inlinecheck" id="partner-data-label"><input type="checkbox" name="partnerData" id="partner-data" checked>Нужна новая выгрузка данных со стороны партнёра</label><p class="note">На согласование идеи с партнёром заложено 10 дней, первой версии текста — 5, финальной версии — 2. Подготовка данных партнёра учитывается отдельно.</p></div></fieldset>
 <fieldset><legend>На чём строим материал?</legend><p class="hint">Выберите источник данных для материала.</p><div class="choices">
 <label class="choice"><input type="radio" name="source" value="data" checked><span class="text"><strong>Данные без нового опроса</strong><small>Например, банковские операции, регистрации бизнеса или данные партнёра.</small></span></label>
 <label class="choice"><input type="radio" name="source" value="survey"><span class="text"><strong>Новый опрос</strong><small>Собираем и анализируем ответы предпринимателей или потребителей.</small></span></label>
 <label class="choice"><input type="radio" name="source" value="both"><span class="text"><strong>Данные и новый опрос</strong><small>Готовим обе части параллельно. К тексту переходим, когда готовы обе.</small></span></label>
 </div><div class="subfields" id="data-fields"><label class="control" for="data-ready">Готовность выгрузки</label><select class="input" id="data-ready" name="dataReady"><option value="no">Выгрузку ещё нужно подготовить</option><option value="yes">Наша выгрузка готова; команда исследования её проверит</option></select><p class="note">Готовая выгрузка убирает 5 дней на её подготовку. Проверка и интерпретация остаются.</p></div>
-<div class="subfields" id="survey-fields" hidden><label class="control" for="questionnaire">Кто готовит анкету и методологию?</label><select class="input" id="questionnaire" name="questionnaire"><option value="team">Команда исследования</option><option value="partner">Партнёр с нашей помощью</option><option value="ready">Уже подготовлены и согласованы с командой</option></select><div id="question-days-field"><label class="control" for="question-days">Дополнительное время на анкету и методологию, раб. дней</label><input class="input" id="question-days" name="questionDays" type="number" min="0" max="120" step="1" placeholder="Необязательно, по умолчанию 0"><p class="note" id="question-note">На подготовку анкеты и методологии может потребоваться дополнительное время в зависимости от сложности. Если оно известно, добавьте его к расчёту.</p></div><div class="notice">На запуск, сбор ответов и обработку заложено 14 рабочих дней: 2 + 7 + 5.</div></div></fieldset>
+<div class="subfields" id="survey-fields" hidden><label class="control" for="questionnaire">Кто готовит анкету и методологию?</label><select class="input" id="questionnaire" name="questionnaire" aria-describedby="question-note"><option value="team">Команда исследований</option><option value="partner">Совместно с партнёром</option><option value="ready">Уже подготовлены и согласованы с командой</option></select><div class="notice" id="question-note" aria-live="polite">Анкета и методология — в среднем 3 рабочих дня. Запуск, сбор ответов и обработка — ещё 14 рабочих дней: 2 + 7 + 5.</div><p class="note" id="question-complexity">В зависимости от сложности может потребоваться дополнительное время. Его можно указать в блоке «Дополнительные сроки, согласованные с командой».</p></div></fieldset>
 <fieldset><legend>Насколько проработана идея?</legend><div class="choices compact"><label class="choice"><input type="radio" name="idea" value="ready" checked><span class="text"><strong>Есть тема и гипотезы</strong><small>Понятно, что проверяем и зачем.</small></span></label><label class="choice"><input type="radio" name="idea" value="develop"><span class="text"><strong>Есть только идея</strong><small>Сформулируем гипотезы вместе: +5 рабочих дней.</small></span></label></div></fieldset>
-<fieldset><legend>Участвует внешний партнёр?</legend><p class="hint">Партнёр вместе с нами выпускает материал и согласует его. Внутренний заказчик или эксперт партнёром здесь не считается.</p><div class="choices compact"><label class="choice"><input type="radio" name="partner" value="no" checked><span class="text"><strong>Нет</strong></span></label><label class="choice"><input type="radio" name="partner" value="yes"><span class="text"><strong>Да, совместное исследование</strong></span></label></div><div id="partner-fields" hidden><label class="inlinecheck" id="partner-data-label"><input type="checkbox" name="partnerData" id="partner-data" checked>Нужна новая выгрузка данных со стороны партнёра</label><p class="note">Для совместного выпуска используем партнёрский порядок работы: 10 дней на согласование идеи, 5 — на первый драфт и 2 — на финальную версию. Данные партнёра учитываются отдельно. Выбранный размер не меняется.</p></div></fieldset>
-<div class="field-block" id="extra-fields" hidden><label class="control" for="extra-days">Дополнительная работа для большого исследования, раб. дней</label><input class="input" id="extra-days" name="extraDays" type="number" min="0" max="120" step="1" placeholder="Необязательно, по умолчанию 0"><p class="note">На новую методологию, сложную выгрузку или расширенный объём может потребоваться дополнительное время. Добавьте его, если срок уже известен.</p></div>
+<details class="field-block" id="additional-times"><summary>Дополнительные сроки, согласованные с командой</summary><p class="note">Заполняйте, только если уже обсудили дополнительную работу и её срок с командой. Если оценки пока нет, оставьте поля пустыми: это время не будет включено в расчёт.</p><div id="question-days-field" hidden><label class="control" id="question-days-label" for="question-days">Дополнительно к 3 дням на анкету и методологию, рабочих дней</label><input class="input" id="question-days" name="questionDays" type="number" min="0" max="120" step="1" placeholder="Укажите согласованную добавку" aria-describedby="question-days-error"><p class="note date-error" id="question-days-error" role="alert"></p></div><label class="control" for="extra-days">На дополнительную работу по теме и объёму, рабочих дней</label><input class="input" id="extra-days" name="extraDays" type="number" min="0" max="120" step="1" placeholder="Укажите согласованный срок" aria-describedby="extra-days-error"><p class="note date-error" id="extra-days-error" role="alert"></p></details>
 </div>
 <div id="quick-fields" hidden><fieldset><legend>Что нужно?</legend><div class="choices">
 <label class="choice"><input type="radio" name="quickType" value="existing" checked><span class="text"><strong>Цифра или комментарий по готовым исследованиям</strong><small>По исследованиям, которые уже были. 1 рабочий день.</small></span></label>
-<label class="choice"><input type="radio" name="quickType" value="new"><span class="text"><strong>Новая цифра</strong><small>До 4 рабочих дней в зависимости от загрузки команды.</small></span></label>
-</div><p class="note">Срок считаем с планового старта работы.</p></fieldset></div>
-<fieldset class="field-block"><legend>Когда планируем?</legend><div class="two"><div><label class="control" for="request-date">Дата запроса</label><input class="input" type="date" id="request-date" name="requestDate" min="2026-01-01" max="2027-12-31" required></div><div><label class="control" for="start-date">Плановый старт работы</label><input class="input" type="date" id="start-date" name="startDate" min="2026-01-01" max="2027-12-31" required></div></div><p class="notice" id="queue-inline" role="status"></p><label class="inlinecheck"><input type="checkbox" id="start-confirmed" name="confirmed">Дата старта согласована с командой</label><p class="note">По умолчанию считаем старт от даты запроса. Если команда занята, поставьте доступную дату: ожидание покажем отдельно.</p><label class="control" for="deadline">Желаемая дата выпуска <span class="meta">· необязательно</span></label><input class="input" type="date" id="deadline" name="deadline" min="2026-01-01" max="2027-12-31"><p class="note">Дедлайн не сокращает этапы. Калькулятор покажет, укладывается ли в него план.</p><details style="margin-top:14px"><summary>Паузы и календарь</summary><p>Учтены федеральные выходные и переносы РФ на 2026–2027 годы. Сокращённый рабочий день считается за один день. Другие даты требуют обновления календаря.</p><label class="control" for="pauses">Дополнительные нерабочие даты или периоды</label><textarea class="input" id="pauses" name="pauses" rows="3" placeholder="2026-11-16&#10;2026-12-21..2026-12-25" aria-describedby="pause-help"></textarea><p class="note" id="pause-help">Одна дата или диапазон на строку: ГГГГ-ММ-ДД..ГГГГ-ММ-ДД. Для общих пауз проекта, например отпусков или ожидания ответа.</p></details><p class="note date-error" id="form-errors" role="alert"></p></fieldset>
-<div style="margin-top:22px"><button class="text-btn" id="reset-plan" type="button">Сбросить настройки</button><p class="status" id="reset-status" role="status"></p></div>
+<label class="choice"><input type="radio" name="quickType" value="new"><span class="text"><strong>Новая цифра по уже имеющимся данным</strong><small>До 4 рабочих дней в зависимости от загрузки команды.</small></span></label>
+</div></fieldset></div>
+<fieldset class="field-block" id="planning-fields"><legend>Когда планируем?</legend><div class="two"><div><label class="control" for="request-date">Дата запроса</label><input class="input" type="date" id="request-date" name="requestDate" min="2026-01-01" max="2027-12-31" required aria-describedby="request-error"><p class="note date-error" id="request-error" role="alert"></p></div><div><label class="control" for="start-date">Плановый старт работы</label><input class="input" type="date" id="start-date" name="startDate" min="2026-01-01" max="2027-12-31" required aria-describedby="start-error"><p class="note date-error" id="start-error" role="alert"></p></div></div><p class="notice" id="queue-inline" role="status"></p><label class="inlinecheck"><input type="checkbox" id="start-confirmed" name="confirmed">Дата старта согласована с командой</label><p class="note">По умолчанию считаем старт от даты запроса. Если команда занята, поставьте доступную дату: ожидание покажем отдельно.</p><label class="control" for="deadline">Желаемая дата выпуска <span class="meta">· необязательно</span></label><input class="input" type="date" id="deadline" name="deadline" min="2026-01-01" max="2027-12-31" aria-describedby="deadline-error"><p class="note date-error" id="deadline-error" role="alert"></p><p class="note">Дедлайн не сокращает этапы. Калькулятор покажет, укладывается ли в него план.</p><p class="note date-error" id="form-errors" role="alert"></p></fieldset>
+<div style="margin-top:22px" id="reset-controls"><button class="text-btn" id="reset-plan" type="button">Сбросить настройки</button><p class="status" id="reset-status" role="status"></p></div>
 </form>
-<aside class="sidebar" id="estimate" aria-label="Результат расчёта"><div class="result"><div id="result-body"></div><div class="actions"><button class="btn" id="print" type="button">Печать</button></div></div><div class="side-foot"><p>Расчёт помогает обсудить сроки. Заявка не отправляется, место в плане команды не бронируется.</p><p>Один рабочий день старта считается первым днём работы. Выходные и паузы не расходуют срок этапа.</p><a href="#schedule">Посмотреть этапы ↓</a></div></aside>
+<aside class="sidebar" id="estimate" aria-label="Результат расчёта"><div class="result"><div id="result-body"></div></div><div class="side-foot" id="research-side-foot"><p>Расчёт помогает обсудить сроки. Заявка не отправляется, место в плане команды не бронируется.</p><p>Один рабочий день старта считается первым днём работы. Выходные и праздничные дни не расходуют срок этапа.</p><a href="#schedule">Посмотреть этапы ↓</a></div></aside>
 </div>
-<section class="timeline" id="schedule" aria-labelledby="schedule-title"><div class="section-title"><h2 id="schedule-title">Из чего складывается срок</h2><span id="schedule-caption">Рабочие дни · до публикации</span></div><p class="hint" id="schedule-note">Последовательные этапы складываются; параллельные идут одновременно.</p><div class="ribbon" id="ribbon" aria-hidden="true"></div><div class="table-scroll"><table><thead><tr><th scope="col">Этап и результат</th><th scope="col">Дней</th><th scope="col">Даты</th></tr></thead><tbody id="stages"></tbody></table></div></section>
-<section class="method"><details id="method"><summary>Как устроен расчёт</summary><ul>
+<section class="timeline" id="schedule" aria-labelledby="schedule-title"><div class="section-title"><h2 id="schedule-title">Из чего складывается срок</h2><span id="schedule-caption">Рабочие дни · до публикации</span></div><p class="hint" id="schedule-note">Последовательные этапы складываются; параллельные идут одновременно.</p><div class="ribbon" id="ribbon" aria-hidden="true"></div><div class="table-scroll"><table><thead><tr><th scope="col">Этап и результат</th><th scope="col">Рабочих дней</th><th scope="col">Даты</th></tr></thead><tbody id="stages"></tbody></table></div></section>
+<section class="method" id="research-method"><details id="method"><summary>Как устроен расчёт</summary><ul>
 <li>Новость: 2 + 11 + 4 + 2 + 4 + 4 = <b>27 рабочих дней</b>. В последнем блоке параллельно идут проверки и подготовка выпуска; корректура завершается после правок, публикация — после вычитки и выхода в СМИ. Инфографика в новость не включена.</li>
-<li>Стандартное исследование: 3 + 11 + 5 + 19 + 5 = <b>43 рабочих дня</b>. Четыре дня инфографики входят в параллельную работу над текстом и повторно к итогу не прибавляются.</li>
-<li>Полный партнёрский флоу: 13 + 22 + 5 + 26 + 5 = <b>71 рабочий день</b>.</li>
-<li>Опрос: 2 дня на запуск, 7 на сбор и 5 на обработку — <b>14 рабочих дней</b>. На подготовку анкеты и методологии может потребоваться дополнительное время в зависимости от сложности. Сочетание с данными считается как максимум двух параллельных веток, включая подготовку анкеты в опросной ветке.</li>
-<li>S/M/L обозначают сложность сбора материала.</li>
+<li>Исследование: 3 + 11 + 5 + 19 + 5 = <b>43 рабочих дня</b>. Четыре дня инфографики входят в параллельную работу над текстом и повторно к итогу не прибавляются.</li>
+<li>Партнёрский материал: 13 + 22 + 5 + 26 + 5 = <b>71 рабочий день</b>.</li>
+<li>Анкета и методология: команда исследований — в среднем 3 рабочих дня; совместно с партнёром — 5 дней; уже готовы — 0 дней. Запуск опроса — 2 дня, сбор ответов — 7, обработка — 5. Всего на опрос: <b>17, 19 или 14 рабочих дней</b> соответственно. В зависимости от сложности может потребоваться дополнительное время. Сочетание с данными считается как максимум двух параллельных веток, включая подготовку анкеты в опросной ветке.</li>
 <li>Если партнёр задерживает данные или согласование, план пересматривается; после месяца без данных задача отменяется по партнёрскому флоу.</li>
 <li>Спецпроекты и тренд-репорты в калькулятор не входят. Для нескольких самостоятельных выпусков нужен отдельный план.</li>
 </ul><p>Календарь: постановления Правительства РФ о переносах на <a href="https://government.ru/docs/56309/" target="_blank" rel="noopener">2026 год</a> и <a href="https://government.ru/docs/59913/" target="_blank" rel="noopener">2027 год</a>. Федеральная пятидневная неделя.</p></details></section>
@@ -69,40 +69,44 @@ function iso(d){return d.toISOString().slice(0,10)}
 function parseDate(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s))return null;const d=new Date(s+'T12:00:00Z');return !isNaN(d)&&iso(d)===s?d:null}
 function nextDay(d){return new Date(d.getTime()+DAY)}
 function inCalendar(d){return d&&d.getUTCFullYear()>=2026&&d.getUTCFullYear()<=2027}
-function workday(d,pauses=new Set()){const s=iso(d);return !pauses.has(s)&&(WORKING_WEEKENDS.has(s)||(![0,6].includes(d.getUTCDay())&&!HOLIDAYS.has(s)))}
-function nextWork(d,pauses){let n=0;while(!workday(d,pauses)&&n++<2000)d=nextDay(d);return d}
-function dateAt(start,offset,pauses){let d=nextWork(new Date(start),pauses);for(let i=0;i<offset;i++)d=nextWork(nextDay(d),pauses);return d}
-function countWork(a,b,pauses){let n=0;for(let d=new Date(a);d<b;d=nextDay(d))if(workday(d,pauses))n++;return n}
-function parsePauses(raw){const set=new Set();for(const line of raw.split(/[\n,;]+/).map(x=>x.trim()).filter(Boolean)){const parts=line.split('..');if(parts.length>2)throw Error('Проверьте формат пауз: дата или две даты через «..».');const a=parseDate(parts[0]),b=parseDate(parts[1]||parts[0]);if(!inCalendar(a)||!inCalendar(b)||a>b)throw Error('В паузах нужны корректные даты 2026–2027 годов; конец не может быть раньше начала.');for(let d=a;d<=b;d=nextDay(d))set.add(iso(d));}return set}
+function workday(d){const s=iso(d);return WORKING_WEEKENDS.has(s)||(![0,6].includes(d.getUTCDay())&&!HOLIDAYS.has(s))}
+function nextWork(d){let n=0;while(!workday(d)&&n++<2000)d=nextDay(d);return d}
+function dateAt(start,offset){let d=nextWork(new Date(start));for(let i=0;i<offset;i++)d=nextWork(nextDay(d));return d}
+function countWork(a,b){let n=0;for(let d=new Date(a);d<b;d=nextDay(d))if(workday(d))n++;return n}
 function integer(value,min,max){return value!==''&&Number.isInteger(Number(value))&&Number(value)>=min&&Number(value)<=max?Number(value):null}
+function questionnaireDays(type){return type==='ready'?0:type==='partner'?5:3}
 function makePlan(s){
  const rows=[],missing=[],warnings=[];let cursor=0;
  const add=(name,days,detail='',kind='normal')=>{rows.push({name,days,detail,kind,offset:cursor});if(days!==null)cursor+=days;else missing.push(name)};
- if(s.mode==='quick'){const fresh=s.quickType==='new';add(fresh?'Подготовка новой цифры':'Цифра или комментарий по готовым исследованиям',fresh?4:1,fresh?'До 4 рабочих дней в зависимости от загрузки команды.':'По исследованиям, которые уже были. 1 рабочий день.');return {rows,total:cursor,missing,warnings:[],size:'—',name:'Быстрый запрос',upperBound:fresh}}
- const partner=s.partner==='yes',news=s.format==='s'&&!partner;
- const large=s.format==='l';
+ if(s.mode==='quick'){const fresh=s.quickType==='new';add(fresh?'Подготовка новой цифры по уже имеющимся данным':'Цифра или комментарий по готовым исследованиям',fresh?4:1,fresh?'До 4 рабочих дней в зависимости от загрузки команды.':'По исследованиям, которые уже были. 1 рабочий день.');return {rows,total:cursor,missing,warnings:[],name:'Быстрый запрос',upperBound:fresh}}
+ const partner=s.format==='partner',news=s.format==='news';
  const hasData=s.source!=='survey',hasSurvey=s.source!=='data';
  if(s.idea==='develop')add('Проработка идеи и гипотез',5,'Формулируем гипотезы и задачи исследования.');
  if(partner)add('Согласование идеи с партнёром',10,'Фиксируем идею, роли и состав данных.');
  add(news?'Заявка и оценка новостного потенциала':'Подготовка и согласование заявки',news?2:3,'Тема, гипотезы, аудитория, польза и необходимые данные.');
- const extra=large?integer(s.extraDays||'0',0,120):0;
+ const extra=integer(s.extraDays||'0',0,120);
  if(extra!==0)add('Дополнительная работа по теме и объёму',extra,'Дополнительное время, указанное в расчёте.');
+ const baseQuestionDays=questionnaireDays(s.questionnaire);
  let dataDays=0,surveyDays=0,q=0;
  if(hasData)dataDays=(s.dataReady==='yes'?6:11)+(partner&&s.partnerData?11:0);
- if(hasSurvey){q=s.questionnaire==='ready'?0:integer(s.questionDays||'0',0,120);if(q===null)missing.push('Подготовка анкеты и методологии');surveyDays=(q||0)+(s.questionnaire==='partner'?3:0)+14;}
+ if(hasSurvey){
+  const additionalQuestionDays=integer(s.questionDays||'0',0,120);
+  q=s.questionnaire==='ready'?0:additionalQuestionDays===null?null:baseQuestionDays+additionalQuestionDays;
+  if(q===null)missing.push('Дополнительное время на анкету и методологию');
+  surveyDays=(q===null?baseQuestionDays:q)+14;
+ }
  const off=cursor;
  const branch=[];
  if(hasData)branch.push({name:partner&&s.partnerData?'Данные команды и партнёра':'Данные команды',days:dataDays,detail:(s.dataReady==='yes'?'Выгрузка команды готова; проверка — 2 дня, интерпретация — 4.':'Выгрузка — 5 дней, проверка — 2, интерпретация — 4.')+(partner&&s.partnerData?' Данные партнёра добавляют 11 дней с учётом частичного перекрытия выгрузок по флоу.':''),offset:off,kind:'branch'});
- if(hasSurvey)branch.push({name:'Опрос: от анкеты до выводов',days:q===null?null:surveyDays,knownDays:surveyDays,detail:`Анкета и методология — ${q===null?'введите от 0 до 120 дней':s.questionnaire==='ready'?'готовы':q>0?q+' дополнительных дн.':'дополнительное время не добавлено'}${s.questionnaire==='partner'?'; наша помощь с анкетой партнёра — 3 дн.':''}; запуск — 2, сбор ответов — 7, обработка — 5.`,offset:off,kind:'branch'});
+ if(hasSurvey)branch.push({name:'Опрос: от анкеты до выводов',days:q===null?null:surveyDays,knownDays:surveyDays,detail:`Анкета и методология${s.questionnaire==='partner'?' совместно с партнёром':''} — ${q===null?baseQuestionDays+' дн. + дополнительный срок, который нужно уточнить':s.questionnaire==='ready'?'готовы, 0 дн.':baseQuestionDays+' дн.'+(q>baseQuestionDays?' + '+(q-baseQuestionDays)+' дополнительных дн.':'')}; запуск — 2, сбор ответов — 7, обработка — 5.`,offset:off,kind:'branch'});
  const blockDays=Math.max(dataDays,surveyDays);
  rows.push({name:hasData&&hasSurvey?'Данные и опрос — параллельно':hasSurvey?'Подготовка и проведение опроса':'Работа с данными',days:q===null?null:blockDays,knownDays:blockDays,detail:hasData&&hasSurvey?'Длительность блока равна более длинной ветке. Следующий этап — после готовности обеих.':'Готовим факты, выводы и ограничения для материала.',kind:hasData&&hasSurvey?'parallel':'normal',offset:off,branch});cursor+=blockDays;
- if(hasSurvey&&s.questionnaire!=='ready'&&q===0)warnings.push('На подготовку анкеты и методологии может потребоваться дополнительное время в зависимости от сложности. Оно пока не добавлено к расчёту.');
  if(!news)add('Подготовка и согласование структуры',5,'Структура — 2 дня, редакторская проверка — 2, доработка — 1.');
- add('Написание первого драфта',4,'Полный текст с выводами и объяснениями.');
- if(partner)add('Проверка первого драфта партнёром',5,'Комментарии партнёра по смыслу, логике и данным.');
+ add('Первая версия текста',4,'Полный текст с выводами и объяснениями.');
+ if(partner)add('Проверка текста партнёром',5,'Комментарии партнёра по смыслу, логике и данным.');
  if(news){add('Редакторская проверка',2,'Комментарии по смыслу, логике и данным.');add('Доработка текста',4,'Автор вносит редакторские правки.');add('Проверки, финализация и выпуск',4,'Проверка экспертом и продуктом; финализация, подключение продвижения, корректура и публикация. Корректура — после правок, выпуск — после вычитки и выхода в СМИ.', 'parallel');}
- else{add('Два круга редактуры и доработки',10,'Первый чек — 3 дня, доработка — 3, второй чек — 2, финализация и передача ТЗ — 2. Подключаем продвижение.');add('Проверки экспертом и продуктом',3,'Проверяем выводы, факты и интеграции. Инфографика занимает 4 дня параллельно проверкам и финализации текста; к общему сроку повторно не прибавляется.', 'parallel');if(partner)add('Утверждение текста партнёром',2,'Финальные комментарии и согласование результата.');add('Финализация текста и пресс-релиза',2,'Собираем финальный пакет материалов.');add('Корректура',1,'Вычитываем полный пакет.');add('Дизайн и вёрстка',2,'Собираем страницу из готового текста и инфографики.');add('Питчинг и проверка вёрстки',1,'Отправляем материал СМИ и проверяем страницу одновременно.','parallel');add('Публикация',1,'Выход в СМИ и на сайте.');}
- return {rows,total:cursor,missing:[...new Set(missing)],warnings,size:s.format.toUpperCase(),name:partner?'Партнёрское исследование':news?'Новость':large?'Большое исследование':'Стандартное исследование'};
+ else{add('Редактура и правки',10,'Первая проверка — 3 дня, доработка — 3, повторная проверка — 2, финализация и передача задания — 2. Подключаем продвижение.');add('Проверки экспертом и продуктом',3,'Проверяем выводы, факты и интеграции. Инфографика занимает 4 дня параллельно проверкам и финализации текста; к общему сроку повторно не прибавляется.', 'parallel');if(partner)add('Утверждение текста партнёром',2,'Финальные комментарии и согласование результата.');add('Финализация текста и пресс-релиза',2,'Собираем финальный пакет материалов.');add('Подготовка к публикации',4,'Корректура — 1 день; дизайн и вёрстка — 2 дня; предложение материала СМИ и проверка вёрстки — 1 день, эти две задачи идут одновременно.');add('Публикация',1,'Выход в СМИ и на сайте.');}
+ return {rows,total:cursor,missing:[...new Set(missing)],warnings,name:partner?'Партнёрский материал':news?'Новость':'Исследование'};
 }
 </script>
 <script>
@@ -110,40 +114,88 @@ const form=document.getElementById('planner'),$=id=>document.getElementById(id);
 const read=()=>Object.fromEntries(new FormData(form));
 let current=null,lastRequest='',confirmedStart=null;
 function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function nice(d,year=true){return new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'short',...(year?{year:'numeric'}:{}),timeZone:'UTC'}).format(d).replace(' г.','')}
-function calendarWeeks(start,finish,upper=false){const days=Math.max(1,Math.round((finish-start)/DAY)+1);if(days<7)return upper?'До 1 недели':'Меньше недели';const weeks=upper?Math.ceil(days/7*10)/10:Math.round(days/7*10)/10;return (upper?'До ':'≈ ')+new Intl.NumberFormat('ru-RU',{maximumFractionDigits:1}).format(weeks)+' нед.';}
+function nice(d,year=true){return new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long',...(year?{year:'numeric'}:{}),timeZone:'UTC'}).format(d).replace(' г.','')}
+function plural(n,one,few,many){const last=n%10,hundred=n%100;return last===1&&hundred!==11?one:last>=2&&last<=4&&(hundred<12||hundred>14)?few:many}
+function workDays(n){return n+' '+plural(n,'рабочий день','рабочих дня','рабочих дней')}
+function calendarWeeks(start,finish){const days=Math.max(1,Math.round((finish-start)/DAY)+1);if(days<7)return 'меньше недели';const weeks=Math.max(1,Math.round(days/7));return 'около '+weeks+' '+(weeks%10===1&&weeks%100!==11?'недели':'недель')}
 function radio(name,value){form.querySelector(`input[name="${name}"][value="${value}"]`).checked=true}
 function toggle(id,show){$(id).hidden=!show}
-function sync(){const s=read(),quick=s.mode==='quick',survey=s.source!=='data',hasData=s.source!=='survey',partner=s.partner==='yes';
- toggle('research-fields',!quick);toggle('quick-fields',quick);toggle('data-fields',hasData);toggle('survey-fields',survey);toggle('question-days-field',s.questionnaire!=='ready');toggle('partner-fields',partner);toggle('partner-data-label',hasData);toggle('extra-fields',!quick&&s.format==='l');
- $('question-note').textContent='На подготовку анкеты и методологии может потребоваться дополнительное время в зависимости от сложности. Если оно известно, добавьте его к расчёту.'+(s.questionnaire==='partner'?' Помощь с анкетой партнёра уже добавляет 3 рабочих дня.':'');
- return s;}
-function computeDates(s,p){const errors=[];let pauses=new Set();try{pauses=parsePauses(s.pauses||'')}catch(e){errors.push(e.message)}const request=parseDate(s.requestDate),rawStart=parseDate(s.startDate),deadline=s.deadline?parseDate(s.deadline):null;
- if(!inCalendar(request)||!inCalendar(rawStart))errors.push('Укажите даты запроса и старта в пределах 2026–2027 годов.');
- if(request&&rawStart&&rawStart<request)errors.push('Старт не может быть раньше запроса. Измените одну из дат.');
- if(s.deadline&&!inCalendar(deadline))errors.push('Укажите корректный дедлайн в пределах 2026–2027 годов.');
- if(request&&deadline&&deadline<request)errors.push('Желаемая дата выпуска не может быть раньше запроса.');
- if(errors.length)return {errors,pauses};
- const start=nextWork(rawStart,pauses),finish=p.missing.length?null:dateAt(start,p.total-1,pauses);
- if(!inCalendar(start)||(finish&&!inCalendar(finish)))errors.push('План выходит за пределы календаря 2026–2027. Срок в рабочих днях рассчитан, для дат нужно обновить календарь.');
- return {errors,pauses,request,start,finish:errors.length?null:finish,deadline,queue:countWork(request,start,new Set()),totalWait:finish?countWork(request,nextDay(finish),new Set()):null,shifted:iso(start)!==s.startDate};}
-function render(){const s=sync(),p=makePlan(s),d=computeDates(s,p);if(s.confirmed&&(!d.start||iso(d.start)!==confirmedStart)){$('start-confirmed').checked=false;delete s.confirmed;confirmedStart=null;}const valid=!d.errors.length,complete=valid&&!p.missing.length,range=(offset,days)=>complete&&days?nice(dateAt(d.start,offset,d.pauses),false)+' — '+nice(dateAt(d.start,offset+days-1,d.pauses),false):days===0?'Не требуется':'После оценки';
- current={s,p,d,complete};$('queue-inline').textContent=valid?'Ожидание в очереди: '+d.queue+' раб. дн. Это время между запросом и стартом работы.':'Ожидание в очереди появится после заполнения корректных дат.';$('reset-status').textContent='';$('form-errors').textContent=d.errors.join(' ');$('request-date').setAttribute('aria-invalid',String(!inCalendar(parseDate(s.requestDate))));$('start-date').setAttribute('aria-invalid',String(!!d.errors.length));
- const knownLabel=p.missing.length?' + неоценённые этапы':' до '+(s.mode==='quick'?'ответа':'выпуска');
- let deadline='';if(complete&&d.deadline){const gap=Math.round((d.deadline-d.finish)/DAY);deadline=`<div class="notice ${gap<0?'warn':''}">${gap>=0?'План укладывается в желаемую дату. Запас: '+gap+' календ. дн.':'План позже желаемой даты на '+(-gap)+' календ. дн. Сократить срок можно только после пересмотра объёма или флоу.'}</div>`;}
- const assumptions=[];if(!s.confirmed)assumptions.push('Старт пока не подтверждён командой.');if(d.shifted&&valid)assumptions.push('Старт перенесён на ближайший рабочий день.');
- $('result-body').innerHTML=`<div class="result-head"><span class="size">${p.size}</span><span>${p.name}</span></div><h2 class="duration">${p.missing.length?'От ':p.upperBound?'До ':''}${p.total} раб. дн.</h2><p class="result-sub">${esc(knownLabel)}. ${p.missing.length?'Оцените недостающие этапы, чтобы получить дату.':(s.mode==='quick'?(p.upperBound?'Срок подготовки новой цифры зависит от загрузки команды.':'Цифра или комментарий по исследованиям, которые уже были.'):'По выбранному сценарию, с редактурой и согласованиями.')}</p>${complete?`<p class="weeks">${calendarWeeks(d.start,d.finish,p.upperBound)} по календарю от старта</p>`:''}<dl class="summary"><div><dt>Запрос</dt><dd>${d.request?nice(d.request):'—'}</dd></div><div><dt>Старт работы</dt><dd>${valid?nice(d.start):'Проверьте даты'}</dd></div><div><dt>Ожидание в очереди</dt><dd>${valid?d.queue+' раб. дн.':'—'}</dd></div><div class="release"><dt>${s.mode==='quick'?(p.upperBound?'Плановый ответ — до':'Плановый ответ'):'Плановый выпуск'}</dt><dd>${complete?nice(d.finish):'Нужна оценка'}</dd></div>${complete?`<div><dt>От запроса до результата</dt><dd>${p.upperBound?'до ':''}${d.totalWait} раб. дн.<br><span class="meta">${calendarWeeks(d.request,d.finish,p.upperBound)}</span></dd></div>`:''}</dl>${p.missing.length?`<div class="notice warn"><b>Нужно уточнить:</b><br>${p.missing.map(esc).join('<br>')}</div>`:''}${d.errors.length?`<div class="notice warn">${d.errors.map(esc).join('<br>')}</div>`:''}${deadline}${p.warnings.map(w=>`<div class="notice">${esc(w)}</div>`).join('')}<div class="assumptions">${assumptions.map(esc).join(' ')} Календарь РФ, 2026–2027. ${s.pauses.trim()?'Добавлены паузы проекта.':''}</div>`;
- $('ribbon').innerHTML=p.rows.filter(r=>r.days).map(r=>`<span style="flex:${r.days}" title="${esc(r.name)}: ${r.days} дн."></span>`).join('');
- $('schedule-caption').textContent=s.mode==='quick'?'Рабочие дни · до ответа':'Рабочие дни · до публикации';
- $('schedule-note').textContent=p.missing.length?'Показаны известные сроки. Даты этапов появятся после оценки недостающей работы.':s.mode==='quick'?(p.upperBound?'Новая цифра: до 4 рабочих дней в зависимости от загрузки команды.':'Цифра или комментарий по готовым исследованиям: 1 рабочий день.'):'Последовательные этапы складываются; параллельные идут одновременно.';
- $('stages').innerHTML=p.rows.map(r=>`<tr><td>${esc(r.name)}${r.kind==='parallel'?'<span class="parallel">параллельно</span>':''}<small>${esc(r.detail)}</small>${r.branch?r.branch.map(b=>`<small><b>${esc(b.name)}:</b> ${b.days===null?b.knownDays+' дн. + анкета':b.days+' дн.'}. ${esc(b.detail)}</small>`).join(''):''}</td><td>${r.days===null?(r.knownDays?r.knownDays+' + ?':'?'):(p.upperBound?'до ':'')+r.days}</td><td>${complete?range(r.offset,r.days):'—'}</td></tr>`).join('')+`<tr class="total-row"><td>Итого работы${p.missing.length?' без неоценённых этапов':''}</td><td>${p.missing.length?'от ':p.upperBound?'до ':''}${p.total}</td><td>${complete?nice(d.finish):'—'}</td></tr>`;
- $('live-result').textContent=`${p.name}. ${p.missing.length?'От ':p.upperBound?'До ':''}${p.total} рабочих дней. ${complete?(s.mode==='quick'?'Плановый ответ':'Плановый выпуск')+(p.upperBound?' до ':' ')+nice(d.finish):'Нужна оценка или проверка дат.'}`;
+function sync(){const s=read(),quick=s.mode==='quick',survey=s.source!=='data',hasData=s.source!=='survey',partner=s.format==='partner';
+ toggle('research-fields',!quick);toggle('quick-fields',quick);for(const id of ['planning-fields','reset-controls','schedule','research-method','research-side-foot'])toggle(id,!quick);
+ toggle('data-fields',hasData);toggle('survey-fields',survey);toggle('question-days-field',survey&&s.questionnaire!=='ready');toggle('partner-fields',partner);toggle('partner-data-label',hasData);
+ $('page-title').textContent=quick?'Сколько займёт ответ?':'Когда выйдет исследование?';
+ $('intro-description').textContent=quick?'Выберите, что нужно: цифра или комментарий по готовым исследованиям либо новая цифра по уже имеющимся данным. Получите срок ответа в рабочих днях.':'Выберите, что нужно подготовить. Получите срок в рабочих днях и график от заявки до публикации — с учётом опроса и согласований.';
+ document.title=$('page-title').textContent+' — Калькулятор сроков';
+ const questionDays=questionnaireDays(s.questionnaire);
+ $('question-note').textContent=(s.questionnaire==='ready'?'Анкета и методология уже готовы — 0 рабочих дней на подготовку.':s.questionnaire==='partner'?'Анкета и методология совместно с партнёром — '+workDays(questionDays)+'.':'Анкета и методология — в среднем '+workDays(questionDays)+'.')+' Запуск, сбор ответов и обработка — ещё 14 рабочих дней: 2 + 7 + 5.';
+ $('question-days-label').textContent='Дополнительно к '+questionDays+' дням на анкету и методологию, рабочих дней';
+ toggle('question-complexity',s.questionnaire!=='ready');
+ return s;
 }
-function resetPlan(preserveMode=false){const selectedMode=preserveMode?read().mode:'research';HTMLFormElement.prototype.reset.call(form);radio('mode',selectedMode||'research');const t=new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Moscow',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());$('request-date').value=t;$('start-date').value=t;lastRequest=t;confirmedStart=null;render();}
-form.addEventListener('change',e=>{if(e.target.id==='start-confirmed'){confirmedStart=e.target.checked&&current.d.start?iso(current.d.start):null;}if(e.target.id==='request-date'){if($('start-date').value===lastRequest)$('start-date').value=e.target.value;lastRequest=e.target.value;}render()});
-form.addEventListener('input',e=>{if(['number','date','textarea'].includes(e.target.type)||e.target.tagName==='TEXTAREA')render()});
-form.addEventListener('submit',e=>e.preventDefault());$('reset-plan').addEventListener('click',()=>{resetPlan(true);$('reset-status').textContent=current.s.mode==='quick'?'Настройки сброшены. Быстрый запрос: цифра или комментарий по готовым исследованиям, 1 рабочий день.':'Настройки сброшены. Стандартное исследование, данные без опроса, 43 рабочих дня.';});
-$('print').addEventListener('click',()=>window.print());
+function computeDates(s,p){
+ const fieldErrors={};
+ const request=parseDate(s.requestDate),rawStart=parseDate(s.startDate),parsedDeadline=s.deadline?parseDate(s.deadline):null;
+ if(!inCalendar(request))fieldErrors.requestDate='Укажите корректную дату запроса в пределах 2026–2027 годов.';
+ if(!inCalendar(rawStart))fieldErrors.startDate='Укажите корректную дату старта в пределах 2026–2027 годов.';
+ if(!fieldErrors.requestDate&&!fieldErrors.startDate&&rawStart<request)fieldErrors.startDate='Старт не может быть раньше запроса. Измените дату старта или запроса.';
+ if(s.deadline&&!inCalendar(parsedDeadline))fieldErrors.deadline='Укажите корректный дедлайн в пределах 2026–2027 годов.';
+ else if(parsedDeadline&&!fieldErrors.requestDate&&parsedDeadline<request)fieldErrors.deadline='Желаемая дата выпуска не может быть раньше запроса.';
+ let start=null,finish=null;
+ if(!fieldErrors.startDate){
+  start=nextWork(rawStart);
+  if(!inCalendar(start)){fieldErrors.startDate='Старт выходит за пределы календаря 2026–2027. Измените дату старта.';start=null;}
+ }
+ if(start&&!p.missing.length){
+  finish=dateAt(start,p.total-1);
+  if(!inCalendar(finish)){fieldErrors.calendar='План выходит за пределы календаря 2026–2027. Срок в рабочих днях рассчитан, для даты выпуска нужно обновить календарь.';finish=null;}
+ }
+ const queue=!fieldErrors.requestDate&&start?countWork(request,start):null;
+ const totalWait=!fieldErrors.requestDate&&finish?countWork(request,nextDay(finish)):null;
+ return {errors:Object.values(fieldErrors),fieldErrors,request,rawStart,start,finish,deadline:fieldErrors.deadline?null:parsedDeadline,queue,totalWait,shifted:!!start&&iso(start)!==s.startDate};
+}
+function fieldError(inputId,errorId,message){$(inputId).setAttribute('aria-invalid',String(!!message));$(errorId).textContent=message||''}
+function renderQuick(p){
+ const description=p.upperBound?'Новая цифра по уже имеющимся данным. Срок зависит от загрузки команды.':'Цифра или комментарий по исследованиям, которые уже были.';
+ $('result-body').innerHTML=`<div class="result-head">${p.name}</div><h2 class="duration">${p.upperBound?'До '+p.total+' рабочих дней':workDays(p.total)}</h2><p class="result-sub">${description}</p>`;
+ $('live-result').textContent=`${p.name}. ${p.upperBound?'До '+p.total+' рабочих дней':workDays(p.total)}. ${description}`;
+}
+function render(){
+ const s=sync(),p=makePlan(s);
+ if(s.mode==='quick'){current={s,p,d:null,complete:true};renderQuick(p);return;}
+ const d=computeDates(s,p);
+ // An unrelated invalid field must not revoke an already agreed start.
+ if(s.confirmed&&d.start&&iso(d.start)!==confirmedStart){$('start-confirmed').checked=false;delete s.confirmed;confirmedStart=null;}
+ const complete=!!d.finish&&!p.missing.length;
+ current={s,p,d,complete};
+ $('queue-inline').textContent=d.queue!==null?'Ожидание в очереди: '+workDays(d.queue)+'. Это время между запросом и стартом работы.':'Ожидание в очереди появится после заполнения корректных дат.';
+ $('reset-status').textContent='';
+ for(const [key,inputId,errorId] of [['requestDate','request-date','request-error'],['startDate','start-date','start-error'],['deadline','deadline','deadline-error']])fieldError(inputId,errorId,d.fieldErrors[key]);
+ $('form-errors').textContent=d.fieldErrors.calendar||'';
+ const questionError=s.source!=='data'&&s.questionnaire!=='ready'&&integer(s.questionDays||'0',0,120)===null?'Укажите целое число от 0 до 120 дней или оставьте поле пустым.':'';
+ const extraError=integer(s.extraDays||'0',0,120)===null?'Укажите целое число от 0 до 120 дней или оставьте поле пустым.':'';
+ fieldError('question-days','question-days-error',questionError);fieldError('extra-days','extra-days-error',extraError);
+ let deadline='';
+ if(complete&&d.deadline){const gap=Math.round((d.deadline-d.finish)/DAY);deadline=`<div class="notice ${gap<0?'warn':''}">${gap>=0?'При выбранном старте план укладывается в желаемую дату. Запас: '+gap+' календ. дн.':'При выбранном старте план позже желаемой даты на '+(-gap)+' календ. дн. Возможность сократить срок нужно обсудить с командой.'}</div>`;}
+ const showYear=complete&&d.start.getUTCFullYear()!==d.finish.getUTCFullYear();
+ const dateSentence=complete?'При старте '+nice(d.start,showYear)+' — выпуск '+nice(d.finish,showYear)+'.':p.missing.length?'Для даты выпуска нужно уточнить дополнительные сроки.':'Для даты выпуска '+(d.fieldErrors.calendar?'нужно обновить календарь.':'исправьте выделенные поля.');
+ const confirmation=s.confirmed&&d.start?'Дата старта согласована с командой.':'Дату старта нужно согласовать с командой.';
+ $('result-body').innerHTML=`<div class="result-head">${p.name}</div><h2 class="duration">${p.missing.length?'Учтено: ':''}${workDays(p.total)}${complete?` <span class="duration-weeks">· ${calendarWeeks(d.start,d.finish)}</span>`:''}</h2><p class="result-sub">${p.missing.length?'Указан срок уже оценённых этапов.':'Максимальная оценка для выбранных условий.'}</p><div class="plan-condition"><p>${dateSentence}</p><p class="note">${confirmation}</p>${d.shifted?'<p class="note">Старт перенесён на ближайший рабочий день.</p>':''}</div>${p.warnings.map(w=>`<div class="notice">${esc(w)}</div>`).join('')}<dl class="summary"><div><dt>Дата запроса</dt><dd>${!d.fieldErrors.requestDate?nice(d.request):'Проверьте дату'}</dd></div><div><dt>Ожидание в очереди</dt><dd>${d.queue!==null?workDays(d.queue):'—'}</dd></div>${complete&&d.totalWait!==null?`<div><dt>От запроса до результата</dt><dd>${workDays(d.totalWait)}<br><span class="meta">${calendarWeeks(d.request,d.finish)}</span></dd></div>`:''}</dl>${p.missing.length?`<div class="notice warn"><b>Нужно уточнить:</b><br>${p.missing.map(esc).join('<br>')}</div>`:''}${d.fieldErrors.calendar?`<div class="notice warn">${esc(d.fieldErrors.calendar)}</div>`:''}${deadline}<div class="assumptions">В расчёт входят выбранные этапы и согласованные дополнительные сроки. Календарь РФ, 2026–2027.</div>`;
+ const range=(offset,days)=>complete&&days?nice(dateAt(d.start,offset),false)+' — '+nice(dateAt(d.start,offset+days-1),false):days===0?'Не требуется':'После оценки';
+ $('ribbon').innerHTML=p.rows.filter(r=>r.days).map(r=>`<span style="flex:${r.days}" title="${esc(r.name)}: ${r.days} дн."></span>`).join('');
+ $('schedule-caption').textContent='Рабочие дни · до публикации';
+ $('schedule-note').textContent=p.missing.length?'Показаны известные сроки. Даты этапов появятся после уточнения дополнительных сроков.':'Последовательные этапы складываются; параллельные идут одновременно.';
+ $('stages').innerHTML=p.rows.map(r=>`<tr><td>${esc(r.name)}${r.kind==='parallel'?'<span class="parallel">параллельно</span>':''}<details class="stage-details"><summary>Что входит<span class="sr-only"> в этап «${esc(r.name)}»</span></summary><div class="stage-content"><p>${esc(r.detail)}</p>${r.branch?r.branch.map(b=>`<p><b>${esc(b.name)}:</b> ${b.days===null?b.knownDays+' дн. + дополнительный срок':b.days+' дн.'}. ${esc(b.detail)}</p>`).join(''):''}</div></details></td><td>${r.days===null?(r.knownDays?r.knownDays+' + ?':'?'):r.days}</td><td>${complete?range(r.offset,r.days):'—'}</td></tr>`).join('')+`<tr class="total-row"><td>Итого работы${p.missing.length?' без неоценённых этапов':''}</td><td>${p.total}</td><td>${complete?nice(d.finish):'—'}</td></tr>`;
+ $('live-result').textContent=`${p.name}. ${workDays(p.total)}. ${complete?calendarWeeks(d.start,d.finish)+'. ':''}${dateSentence} ${confirmation} ${p.warnings.join(' ')}`;
+}
+function resetPlan(preserveMode=false){const selectedMode=preserveMode?read().mode:'research';HTMLFormElement.prototype.reset.call(form);radio('mode',selectedMode||'research');const t=new Intl.DateTimeFormat('sv-SE',{timeZone:'Europe/Moscow',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());$('request-date').value=t;$('start-date').value=t;lastRequest=t;confirmedStart=null;$('additional-times').open=false;render()}
+form.addEventListener('change',e=>{
+ if(e.target.id==='start-confirmed'){if(e.target.checked&&!current.d?.start)e.target.checked=false;confirmedStart=e.target.checked?iso(current.d.start):null;}
+ if(e.target.id==='request-date'){if($('start-date').value===lastRequest)$('start-date').value=e.target.value;lastRequest=e.target.value;}
+ render();
+});
+form.addEventListener('input',e=>{if(['number','date'].includes(e.target.type))render()});
+form.addEventListener('submit',e=>e.preventDefault());
+$('reset-plan').addEventListener('click',()=>{resetPlan(true);$('reset-status').textContent=current.s.mode==='quick'?'Настройки сброшены. Быстрый запрос: цифра или комментарий по готовым исследованиям, 1 рабочий день.':'Настройки сброшены. Исследование, данные без опроса, 43 рабочих дня.';});
 resetPlan();
 </script>
 </body>
